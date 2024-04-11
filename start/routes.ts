@@ -24,6 +24,8 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
+import './routes/city'
+import './routes/message'
 import './routes/comment'
 import './routes/region'
 import './routes/room'

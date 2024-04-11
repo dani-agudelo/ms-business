@@ -9,7 +9,7 @@ export default class City extends BaseModel {
   public name: string
 
   @column()
-  public postalCode: string
+  public postalcode: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

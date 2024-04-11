@@ -31,7 +31,7 @@ export default class CitiesController {
         const theCity: City = await City.findOrFail(params.id);
         const body = request.body();
         theCity.name= body.name;
-        theCity.postalCode = body.postalCode
+        theCity.postalcode = body.postalcode
         return await theCity.save();
     }
 

@@ -10,6 +10,7 @@ export default class extends BaseSchema {
       table.integer('room_capacity')
       table.string('facilities')
       table.boolean('is_available')
+      table.integer('headquarter_id').unsigned().references('headquarters.id').onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

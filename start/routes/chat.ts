@@ -7,3 +7,5 @@ Route.group(() => {
     Route.put("/chats/:id", "ChatsController.update");
     Route.delete("/chats/:id", "ChatsController.delete");
 })
+
+

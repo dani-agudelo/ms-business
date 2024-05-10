@@ -29,7 +29,6 @@ export default class ChatsController {
     public async update({ params, request }: HttpContextContract) {
         const theChat: Chat = await Chat.findOrFail(params.id);
         const body = request.body();
-        theChat.creationdate= body.creationdate;
         theChat.status = body.status
         return await theChat.save();
     }

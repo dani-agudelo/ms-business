@@ -28,9 +28,8 @@ export default class MessagesController {
 
     public async update({ params, request }: HttpContextContract) {
         const theMessage: Message = await Message.findOrFail(params.id);
-        const body = request.body();
-        theMessage.sender = body.sender;
-        theMessage.content = body.content;
+        const data = request.body();
+        theMessage.merge(data);
         return await theMessage.save();
     }
 

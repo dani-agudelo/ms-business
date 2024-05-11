@@ -28,12 +28,8 @@ export default class CommentsController {
 
     public async update({ params, request }: HttpContextContract) {
         const theComment: Comment = await Comment.findOrFail(params.id);
-        const body = request.body();
-        theComment.service_id = body.service_id;
-        theComment.user_id = body.user_id;
-        theComment.rating = body.rating;
-        theComment.comment = body.comment;
-        theComment.date = body.date;
+        const data = request.body();
+        theComment.merge(data);
         return await theComment.save();
     }
 

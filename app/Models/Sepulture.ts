@@ -10,6 +10,15 @@ export default class Sepulture extends BaseModel {
 
   @column()
   public description: string
+ 
+  @column()
+  public cemetery_name: string
+
+  @column()
+  public sepulture_type: string
+
+  @column()
+  public price: number
 
   @column()
   public is_available: boolean

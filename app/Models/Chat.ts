@@ -7,7 +7,7 @@ export default class Chat extends BaseModel {
   public id: number
 
   @column()
-  public status: string
+  public status: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

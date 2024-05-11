@@ -28,8 +28,8 @@ export default class ChatsController {
 
     public async update({ params, request }: HttpContextContract) {
         const theChat: Chat = await Chat.findOrFail(params.id);
-        const body = request.body();
-        theChat.status = body.status
+        const data = request.body();
+        theChat.merge(data);
         return await theChat.save();
     }
 

@@ -28,10 +28,8 @@ export default class SepulturesController {
 
     public async update({ params, request }: HttpContextContract) {
         const theSepulture: Sepulture = await Sepulture.findOrFail(params.id);
-        const body = request.body();
-        theSepulture.sepulture_name = body.sepulture_name;
-        theSepulture.description = body.description;
-        theSepulture.is_available = body.is_available;
+        const data = request.body();
+        theSepulture.merge(data);
         return await theSepulture.save();
     }
 

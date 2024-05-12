@@ -14,6 +14,9 @@ export default class Holder extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
 
+  @column()
+  public customer_id: number;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

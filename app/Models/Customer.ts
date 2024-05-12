@@ -1,7 +1,15 @@
 import { DateTime } from "luxon";
-import { BaseModel, column, HasMany, hasMany } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  column,
+  HasMany,
+  hasMany,
+  ManyToMany,
+  manyToMany,
+} from "@ioc:Adonis/Lucid/Orm";
 import Beneficiary from "./Beneficiary";
 import Holder from "./Holder";
+import Service from "./Service";
 
 export default class Customer extends BaseModel {
   @column({ isPrimary: true })
@@ -22,4 +30,12 @@ export default class Customer extends BaseModel {
     foreignKey: "customer_id",
   })
   public beneficiaries: HasMany<typeof Beneficiary>;
+
+  @manyToMany(() => Service, {
+    pivotTable: "service_executions",
+    pivotForeignKey: "customer_id",
+    pivotRelatedForeignKey: "service_id",
+    pivotColumns: ["comment_id", "chat_id"],
+  })
+  public services: ManyToMany<typeof Service>;
 }

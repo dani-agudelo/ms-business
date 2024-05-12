@@ -1,22 +1,57 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Customer from "App/Models/Customer";
 
+import axios from "axios";
+
+import Env from "@ioc:Adonis/Core/Env";
+import { ModelObject } from "@ioc:Adonis/Lucid/Orm";
+
 export default class CustomersController {
   public async find({ request, params }: HttpContextContract) {
+    const customers: ModelObject[] = [];
+    const { page, per_page } = request.only(["page", "per_page"]);
+
     if (params.id) {
-      let theCustomer: Customer = await Customer.findOrFail(params.id);
-      return theCustomer;
+      const theCustomer: Customer = await Customer.findOrFail(params.id);
+      customers.push(theCustomer);
+    } else if (page && per_page) {
+      const { meta, data } = await Customer.query()
+        .paginate(page, per_page)
+        .then((res) => res.toJSON());
+
+      await Promise.all(
+        data.map(async (customer, index) => {
+          const res = await axios.get(`${Env.get("MS_SECURITY")}/api/users`, {
+            headers: {
+              Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
+            },
+          });
+          const { _id, name, email } = res.data[index];
+          customers.push({ id: customer.id, user_id: _id, name, email });
+        }),
+      );
+
+      return { meta, data: customers };
     } else {
-      const data = request.all();
-      if ("page" in data && "per_page" in data) {
-        const page = request.input("page", 1);
-        const perPage = request.input("per_page", 20);
-        return await Customer.query().paginate(page, perPage);
-      } else {
-        return await Customer.query();
-      }
+      const allCustomers = await Customer.all();
+      customers.push(...allCustomers.map((c) => c.toJSON()));
     }
+
+    await Promise.all(
+      customers.map(async (customer, index) => {
+        const res = await axios.get(`${Env.get("MS_SECURITY")}/api/users`, {
+          headers: {
+            Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
+          },
+        });
+        const { _id, name, email } = res.data[index];
+        customers[index] = { id: customer.id, user_id: _id, name, email };
+      }),
+    );
+
+    return customers;
   }
+
   public async create({ request }: HttpContextContract) {
     const body = request.body();
     const theCustomer: Customer = await Customer.create(body);

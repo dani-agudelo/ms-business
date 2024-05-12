@@ -5,4 +5,4 @@ Route.group(() => {
   Route.post("/", "HoldersController.create");
   Route.put("/:id", "HoldersController.update");
   Route.delete("/:id", "HoldersController.delete");
-}).prefix("/holder");
+}).prefix("/holders");

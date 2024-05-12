@@ -20,13 +20,16 @@ export default class CustomersController {
         .then((res) => res.toJSON());
 
       await Promise.all(
-        data.map(async (customer, index) => {
-          const res = await axios.get(`${Env.get("MS_SECURITY")}/api/users`, {
-            headers: {
-              Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
+        data.map(async (customer: Customer) => {
+          const res = await axios.get(
+            `${Env.get("MS_SECURITY")}/api/users/email/${customer.email}`,
+            {
+              headers: {
+                Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
+              },
             },
-          });
-          const { _id, name, email } = res.data[index];
+          );
+          const { _id, name, email } = res.data;
           customers.push({ id: customer.id, user_id: _id, name, email });
         }),
       );
@@ -38,14 +41,17 @@ export default class CustomersController {
     }
 
     await Promise.all(
-      customers.map(async (customer, index) => {
-        const res = await axios.get(`${Env.get("MS_SECURITY")}/api/users`, {
-          headers: {
-            Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
+      customers.map(async (customer: Customer, index: number) => {
+        const res = await axios.get(
+          `${Env.get("MS_SECURITY")}/api/users/email/${customer.email}`,
+          {
+            headers: {
+              Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
+            },
           },
-        });
-        const { _id, name, email } = res.data[index];
-        customers[index] = { id: customer.id, user_id: _id, name, email };
+        );
+        const { _id, name, email } = res.data;
+      customers[index] = { id: customer.id, user_id: _id, name, email };
       }),
     );
 

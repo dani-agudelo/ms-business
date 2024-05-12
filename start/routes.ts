@@ -38,6 +38,6 @@ import "./routes/cremation";
 import "./routes/customer";
 import "./routes/beneficiary";
 import "./routes/holder";
+import "./routes/administrator";
 import "./routes/service_execution";
 import "./routes/payment";
-import "./routes/subscription";

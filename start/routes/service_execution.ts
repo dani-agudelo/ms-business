@@ -5,4 +5,4 @@ Route.group(() => {
   Route.post("/", "ServiceExecutionsController.create");
   Route.put("/:id", "ServiceExecutionsController.update");
   Route.delete("/:id", "ServiceExecutionsController.delete");
-}).prefix("/service_execution");
+}).prefix("/service_executions");

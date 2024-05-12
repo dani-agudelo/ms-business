@@ -9,6 +9,21 @@ export default class Customer extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
 
+  @column()
+  public name: string;
+
+  @column()
+  public email: string;
+
+  @column()
+  public document: string;
+
+  @column()
+  public phone: string;
+
+  @column()
+  public gender: string;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 
@@ -29,7 +44,7 @@ export default class Customer extends BaseModel {
     foreignKey: "customer_id",
   })
   public serviceExecutions: HasMany<typeof ServiceExecution>;
-  
+
   @hasMany(() => Subscription, {
     foreignKey: "customer_id",
   })

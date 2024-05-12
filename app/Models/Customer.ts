@@ -3,13 +3,11 @@ import { BaseModel, column, HasMany, hasMany } from "@ioc:Adonis/Lucid/Orm";
 import Beneficiary from "./Beneficiary";
 import Holder from "./Holder";
 import ServiceExecution from "./ServiceExecution";
+import Subscription from "./Subscription";
 
 export default class Customer extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
-
-  @column()
-  public user_id: string;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
@@ -31,6 +29,9 @@ export default class Customer extends BaseModel {
     foreignKey: "customer_id",
   })
   public serviceExecutions: HasMany<typeof ServiceExecution>;
-
-  // relationship with plans (la intermedia)
+  
+  @hasMany(() => Subscription, {
+    foreignKey: "customer_id",
+  })
+  public subscriptions: HasMany<typeof Subscription>;
 }

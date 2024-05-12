@@ -10,12 +10,10 @@ export default class extends BaseSchema {
         .integer("customer_id")
         .unsigned()
         .references("customers.id")
-        .onDelete("CASCADE");
       table
         .integer("service_id")
         .unsigned()
         .references("services.id")
-        .onDelete("CASCADE");
       table.integer("comment_id").unsigned().nullable();
       table.integer("chat_id").unsigned().nullable();
       /**

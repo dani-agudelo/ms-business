@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 import {
-  BaseModel,
   BelongsTo,
   belongsTo,
   column,
@@ -10,7 +9,7 @@ import {
 import Customer from "./Customer";
 import Beneficiary from "./Beneficiary";
 
-export default class Holder extends BaseModel {
+export default class Holder extends Customer {
   @column({ isPrimary: true })
   public id: number;
 

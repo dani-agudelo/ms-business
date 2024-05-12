@@ -4,13 +4,12 @@ import {
   column,
   HasMany,
   hasMany,
-  ManyToMany,
-  manyToMany,
 } from "@ioc:Adonis/Lucid/Orm";
 import Relocation from "./Relocation";
 import ServicePlan from "./ServicePlan";
 import Sepulture from "./Sepulture";
 import Cremation from "./Cremation";
+import ServiceExecution from "./ServiceExecution";
 
 export default class Service extends BaseModel {
   @column({ isPrimary: true })
@@ -45,4 +44,8 @@ export default class Service extends BaseModel {
   })
   public cremations: HasMany<typeof Cremation>;
 
+  @hasMany(() => ServiceExecution, {
+    foreignKey: "service_id",
+  })
+  public serviceExecutions: HasMany<typeof ServiceExecution>;
 }

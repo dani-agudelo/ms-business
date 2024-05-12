@@ -9,6 +9,8 @@ import {
 } from "@ioc:Adonis/Lucid/Orm";
 import Comment from "./Comment";
 import Chat from "./Chat";
+import Customer from "./Customer";
+import Service from "./Service";
 
 export default class ServiceExecution extends BaseModel {
   @column({ isPrimary: true })
@@ -31,6 +33,16 @@ export default class ServiceExecution extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
+
+  @hasMany(() => Customer, {
+    foreignKey: "customer_id",
+  })
+  public customer: HasMany<typeof Customer>;
+
+  @hasMany(() => Service, {
+    foreignKey: "service_id",
+  })
+  public service: HasMany<typeof Service>;
 
   @hasMany(() => Comment, {
     foreignKey: "service_execution_id",

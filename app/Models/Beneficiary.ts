@@ -1,9 +1,9 @@
 import { DateTime } from "luxon";
-import { BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
 import Customer from "./Customer";
 import Holder from "./Holder";
 
-export default class Beneficiary extends Customer {
+export default class Beneficiary extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
 

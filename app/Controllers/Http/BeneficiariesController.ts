@@ -39,3 +39,4 @@ export default class BeneficiariesController {
         return await theBeneficiaty.delete();
 
 }
+}

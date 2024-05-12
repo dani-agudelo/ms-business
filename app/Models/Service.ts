@@ -4,11 +4,11 @@ import {
   column,
   HasMany,
   hasMany,
+  ManyToMany,
+  manyToMany,
 } from "@ioc:Adonis/Lucid/Orm";
 import Relocation from "./Relocation";
 import ServicePlan from "./ServicePlan";
-import Sepulture from "./Sepulture";
-import Cremation from "./Cremation";
 
 export default class Service extends BaseModel {
   @column({ isPrimary: true })
@@ -20,8 +20,8 @@ export default class Service extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
 
-  @hasMany(()=> ServicePlan, {
-    foreignKey: "service_id"
+  @hasMany(() => ServicePlan, {
+    foreignKey: "service_id",
   })
   public servicePlans: HasMany<typeof ServicePlan>;
 
@@ -30,17 +30,4 @@ export default class Service extends BaseModel {
     foreignKey: "service_id",
   })
   public relocations: HasMany<typeof Relocation>;
-
-  //Relationships with Sepulture, which is a child of Service
-  @hasMany(() => Sepulture, {
-    foreignKey: "service_id",
-  })
-  public sepultures: HasMany<typeof Sepulture>;
-
-  //Relationships with Cremation, which is a child of Service
-  @hasMany(() => Cremation, {
-    foreignKey: "service_id",
-  })
-  public cremations: HasMany<typeof Cremation>;
 }
-

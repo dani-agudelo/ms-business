@@ -7,6 +7,8 @@ import {
 } from "@ioc:Adonis/Lucid/Orm";
 import Relocation from "./Relocation";
 import ServicePlan from "./ServicePlan";
+import Sepulture from "./Sepulture";
+import Cremation from "./Cremation";
 
 export default class Service extends BaseModel {
   @column({ isPrimary: true })
@@ -23,8 +25,22 @@ export default class Service extends BaseModel {
   })
   public servicePlans: HasMany<typeof ServicePlan>;
 
+  // Relationships with Relocation, which is a child of Service
   @hasMany(() => Relocation, {
     foreignKey: "service_id",
   })
   public relocations: HasMany<typeof Relocation>;
+
+  //Relationships with Sepulture, which is a child of Service
+  @hasMany(() => Sepulture, {
+    foreignKey: "service_id",
+  })
+  public sepultures: HasMany<typeof Sepulture>;
+
+  //Relationships with Cremation, which is a child of Service
+  @hasMany(() => Cremation, {
+    foreignKey: "service_id",
+  })
+  public cremations: HasMany<typeof Cremation>;
 }
+

@@ -12,6 +12,7 @@ export default class extends BaseSchema {
       table.string('sepulture_type')
       table.float('price')
       table.boolean('is_available')
+      table.integer('service_id').unsigned().references('services.id').onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

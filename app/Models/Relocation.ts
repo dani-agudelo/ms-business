@@ -1,7 +1,8 @@
 import { DateTime } from "luxon";
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
+import Service from "./Service";
 
-export default class Relocation extends BaseModel {
+export default class Relocation extends Service {
   @column({ isPrimary: true })
   public id: number;
 
@@ -17,10 +18,23 @@ export default class Relocation extends BaseModel {
   @column()
   public price: number;
 
+  @column()
+  public is_available: boolean;
+
+  @column()
+  public service_id: number;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
+
+  // Relationships
+  @belongsTo(() => Service, {
+    foreignKey: "service_id",
+  })
+  public service: BelongsTo<typeof Service>;
+
 
 }

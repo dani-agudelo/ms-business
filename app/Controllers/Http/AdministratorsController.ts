@@ -12,10 +12,10 @@ export default class AdministratorsController {
     const { page, per_page } = request.only(["page", "per_page"]);
 
     if (params.id) {
-      const theCustomer: Administrator = await Administrator.findOrFail(
+      const theAdministrator: Administrator = await Administrator.findOrFail(
         params.id,
       );
-      administrators.push(theCustomer);
+      administrators.push(theAdministrator);
     } else if (page && per_page) {
       const { meta, data } = await Administrator.query()
         .paginate(page, per_page)
@@ -43,8 +43,8 @@ export default class AdministratorsController {
 
       return { meta, data: administrators };
     } else {
-      const allCustomers = await Administrator.all();
-      administrators.push(...allCustomers.map((c) => c.toJSON()));
+      const allAdministrators = await Administrator.all();
+      administrators.push(...allAdministrators.map((c) => c.toJSON()));
     }
 
     await Promise.all(
@@ -74,24 +74,24 @@ export default class AdministratorsController {
 
   public async create({ request }: HttpContextContract) {
     const body = request.body();
-    const theCustomer: Administrator = await Administrator.create(body);
-    return theCustomer;
+    const theAdministrator: Administrator = await Administrator.create(body);
+    return theAdministrator;
   }
 
   public async update({ params, request }: HttpContextContract) {
-    const theCustomer: Administrator = await Administrator.findOrFail(
+    const theAdministrator: Administrator = await Administrator.findOrFail(
       params.id,
     );
     const data = request.body();
-    theCustomer.merge(data);
-    return await theCustomer.save();
+    theAdministrator.merge(data);
+    return await theAdministrator.save();
   }
 
   public async delete({ params, response }: HttpContextContract) {
-    const theCustomer: Administrator = await Administrator.findOrFail(
+    const theAdministrator: Administrator = await Administrator.findOrFail(
       params.id,
     );
     response.status(204);
-    return await theCustomer.delete();
+    return await theAdministrator.delete();
   }
 }

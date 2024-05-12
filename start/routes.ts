@@ -38,3 +38,4 @@ import "./routes/cremation";
 import "./routes/customer";
 import "./routes/beneficiary";
 import "./routes/holder";
+import "./routes/service_execution";

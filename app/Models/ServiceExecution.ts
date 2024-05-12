@@ -1,6 +1,8 @@
 import { DateTime } from "luxon";
 import {
   BaseModel,
+  BelongsTo,
+  belongsTo,
   column,
   hasMany,
   HasMany,
@@ -34,15 +36,15 @@ export default class ServiceExecution extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
 
-  @hasMany(() => Customer, {
+  @belongsTo(() => Customer, {
     foreignKey: "customer_id",
   })
-  public customer: HasMany<typeof Customer>;
+  public customer: BelongsTo<typeof Customer>;
 
-  @hasMany(() => Service, {
+  @belongsTo(() => Service, {
     foreignKey: "service_id",
   })
-  public service: HasMany<typeof Service>;
+  public service: BelongsTo<typeof Service>;
 
   @hasMany(() => Comment, {
     foreignKey: "service_execution_id",

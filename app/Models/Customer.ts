@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { BaseModel, column, HasMany, hasMany } from "@ioc:Adonis/Lucid/Orm";
 import Beneficiary from "./Beneficiary";
 import Holder from "./Holder";
+import ServiceExecution from "./ServiceExecution";
 
 export default class Customer extends BaseModel {
   @column({ isPrimary: true })
@@ -22,4 +23,9 @@ export default class Customer extends BaseModel {
     foreignKey: "customer_id",
   })
   public beneficiaries: HasMany<typeof Beneficiary>;
+
+  @hasMany(() => ServiceExecution, {
+    foreignKey: "customer_id",
+  })
+  public serviceExecutions: HasMany<typeof ServiceExecution>;
 }

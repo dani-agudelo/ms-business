@@ -1,10 +1,5 @@
 import { DateTime } from "luxon";
-import {
-  BaseModel,
-  column,
-  HasMany,
-  hasMany,
-} from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, column, HasMany, hasMany } from "@ioc:Adonis/Lucid/Orm";
 import Relocation from "./Relocation";
 import ServicePlan from "./ServicePlan";
 import Sepulture from "./Sepulture";

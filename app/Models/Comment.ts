@@ -7,9 +7,6 @@ export default class Comment extends BaseModel {
   public id: number
 
   @column()
-  public service_id: number
-
-  @column()
   public user_id: number
   
   @column()
@@ -17,6 +14,9 @@ export default class Comment extends BaseModel {
 
   @column()
   public comment: string
+
+  @column()
+  public service_execution_id: number
   
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

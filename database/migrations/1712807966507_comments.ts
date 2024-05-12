@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.integer('user_id')
       table.integer('rating')
       table.string('comment')
+      table.integer('service_execution_id').unsigned().references('services.id').onDelete('CASCADE').onUpdate('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

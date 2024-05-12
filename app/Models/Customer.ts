@@ -8,6 +8,9 @@ export default class Customer extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
 
+  @column()
+  public user_id: string;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 
@@ -28,4 +31,6 @@ export default class Customer extends BaseModel {
     foreignKey: "customer_id",
   })
   public serviceExecutions: HasMany<typeof ServiceExecution>;
+
+  // relationship with plans (la intermedia)
 }

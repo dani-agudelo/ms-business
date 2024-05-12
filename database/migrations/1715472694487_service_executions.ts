@@ -9,13 +9,11 @@ export default class extends BaseSchema {
       table
         .integer("customer_id")
         .unsigned()
-        .references("customers.id")
+        .references("customers.id").onDelete('CASCADE').onUpdate('CASCADE');
       table
         .integer("service_id")
         .unsigned()
-        .references("services.id")
-      table.integer("comment_id").unsigned().nullable();
-      table.integer("chat_id").unsigned().nullable();
+        .references("services.id").onDelete('CASCADE').onUpdate('CASCADE'); 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

@@ -2,14 +2,13 @@ import { schema, CustomMessages, rules } from "@ioc:Adonis/Core/Validator";
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 export default class RelocationValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
     relocation_id: schema.number.optional([
       rules.unique({
         table: "relocations",
         column: "id",
-        where: { id: this.ctx.request.input("id") },
       }),
     ]),
     origin: schema.string({}, [

@@ -37,7 +37,7 @@ import "./routes/service_plan";
 import "./routes/cremation";
 import "./routes/customer";
 import "./routes/beneficiary";
-import "./routes/holder";
+import "./routes/owner";
 import "./routes/administrator";
 import "./routes/driver";
 import "./routes/service_execution";

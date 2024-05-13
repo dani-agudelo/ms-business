@@ -10,7 +10,7 @@ import {
 import Customer from "./Customer";
 import Beneficiary from "./Beneficiary";
 
-export default class Holder extends BaseModel {
+export default class Owner extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
 
@@ -29,7 +29,7 @@ export default class Holder extends BaseModel {
   public customer: BelongsTo<typeof Customer>;
 
   @hasMany(() => Beneficiary, {
-    foreignKey: "holder_id",
+    foreignKey: "owner_id",
   })
   public beneficiaries: HasMany<typeof Beneficiary>;
 }

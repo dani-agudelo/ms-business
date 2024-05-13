@@ -6,7 +6,7 @@ export default class HeadquarterValidator {
 
   public schema = schema.create({
     headquarter_id: schema.number.optional([
-      rules.exists({
+      rules.unique({
         table: "headquarters",
         column: "id",
         where: { id: this.ctx.request.input("id") },

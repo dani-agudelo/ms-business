@@ -6,7 +6,7 @@ export default class ServiceExecutionValidator {
 
   public schema = schema.create({
     service_execution_id: schema.number.optional([
-      rules.exists({
+      rules.unique({
         table: "service_executions",
         column: "id",
         where: { id: this.ctx.request.input("id") },
@@ -22,5 +22,11 @@ export default class ServiceExecutionValidator {
     ]),
   });
 
-  public messages: CustomMessages = {};
+  public messages: CustomMessages = {
+    "service_id.required": "El campo service_id es requerido",
+    "service_id.exists": "El campo service_id no existe en la tabla services",
+    "customer_id.required": "El campo customer_id es requerido",
+    "customer_id.exists":
+      "El campo customer_id no existe en la tabla customers",
+  };
 }

@@ -1,10 +1,17 @@
-import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema, CustomMessages, rules } from "@ioc:Adonis/Core/Validator";
+import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 export default class RelocationValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
+    relocation_id: schema.number.optional([
+      rules.unique({
+        table: "relocations",
+        column: "id",
+        where: { id: this.ctx.request.input("id") },
+      }),
+    ]),
     origin: schema.string({}, [
       rules.required(),
       rules.minLength(3),
@@ -15,23 +22,14 @@ export default class RelocationValidator {
       rules.minLength(3),
       rules.maxLength(255),
     ]),
-    date: schema.date({}, [
-      rules.required(),
-      rules.after('today'),
-    ]),
-    price: schema.number([
-      rules.required(),
-      rules.unsigned(),
-    ]),
+    date: schema.date({}, [rules.required(), rules.after("today")]),
+    price: schema.number([rules.required(), rules.unsigned()]),
     is_available: schema.boolean(),
     service_id: schema.number([
       rules.required(),
-      rules.exists({ table: 'services', column: 'id', where: {
-        id: this.ctx.request.input('service_id'),
-      }}),
+      rules.exists({ table: 'services', column: 'id' }),
     ]),
-  })
+  });
 
-  
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {};
 }

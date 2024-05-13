@@ -6,7 +6,7 @@ export default class CremationValidator {
 
   public schema = schema.create({
     cremation_id: schema.number.optional([
-      rules.exists({
+      rules.unique({
         table: "cremations",
         column: "id",
         where: { id: this.ctx.request.input("id") },
@@ -32,5 +32,14 @@ export default class CremationValidator {
     is_available: schema.boolean([rules.required()]),
   });
 
-  public messages: CustomMessages = {};
+  public messages: CustomMessages = {
+    "service_id.required": "El campo service_id es requerido",
+    "service_id.exists": "El campo service_id no existe en la tabla services",
+    "room_id.required": "El campo room_id es requerido",
+    "room_id.exists": "El campo room_id no existe en la tabla rooms",
+    "location.unique": "El campo location ya está en uso",
+    "date.required": "El campo date es requerido",
+    "price.required": "El campo price es requerido",
+    "is_available.required": "El campo is_available es requerido",
+  };
 }

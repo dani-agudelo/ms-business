@@ -25,6 +25,10 @@ export default class PaymentValidator {
     paymentDate: schema.date( {
       format: 'yyyy-MM-dd',
     }),
+    subscription_id: schema.number( [
+      rules.required(),
+      rules.exists({ table: 'subscriptions', column: 'id' }),
+    ]),
   })
 
   public messages: CustomMessages = {}

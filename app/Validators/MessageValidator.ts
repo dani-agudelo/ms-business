@@ -2,7 +2,7 @@ import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class MessageValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
     sender: schema.string({}, [
@@ -16,7 +16,11 @@ export default class MessageValidator {
     ]),
     chat_id: schema.number([
       rules.required(),
-      rules.exists({ table: 'chats', column: 'id' }),
+      rules.exists({
+        table: 'chats', column: 'id', where: {
+          id: this.ctx.request.input('chat_id')
+        }
+      }),
     ]),
   })
 

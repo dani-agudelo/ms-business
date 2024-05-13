@@ -13,7 +13,11 @@ export default class CommentValidator {
       rules.maxLength(500)
     ]),
     service_execution_id: schema.number([
-      rules.exists({ table: 'service_executions', column: 'id' }),
+      rules.exists({
+        table: 'service_executions', column: 'id', where: {
+          id: this.ctx.request.input('service_execution_id')
+        }
+      }),
     ]),
   })
 

@@ -26,7 +26,9 @@ export default class RelocationValidator {
     is_available: schema.boolean(),
     service_id: schema.number([
       rules.required(),
-      rules.exists({ table: 'services', column: 'id' }),
+      rules.exists({ table: 'services', column: 'id', where: {
+        id: this.ctx.request.input('service_id'),
+      }}),
     ]),
   })
 

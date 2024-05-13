@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Headquarter from './Headquarter'
+import Sepulture from './Sepulture'
+import Cremation from './Cremation'
 
 export default class Room extends BaseModel {
   @column({ isPrimary: true })
@@ -31,4 +33,14 @@ export default class Room extends BaseModel {
     foreignKey: 'headquarter_id'
   })
   public headquarter: BelongsTo<typeof Headquarter>
+
+  @hasMany(() => Sepulture, {
+    foreignKey: 'room_id',
+  })
+  public sepultures: HasMany<typeof Sepulture>
+
+  @hasMany(() => Cremation, {
+    foreignKey: 'room_id',
+  })
+  public cremations: HasMany<typeof Cremation>
 }

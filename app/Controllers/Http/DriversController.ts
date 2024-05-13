@@ -4,6 +4,7 @@ import axios from "axios";
 import Env from "@ioc:Adonis/Core/Env";
 import { ModelObject } from "@ioc:Adonis/Lucid/Orm";
 import Driver from "App/Models/Driver";
+import DriverValidator from "App/Validators/DriverValidator";
 
 export default class DriversController {
   public async find({ request, params }: HttpContextContract) {
@@ -58,14 +59,14 @@ export default class DriversController {
   }
 
   public async create({ request }: HttpContextContract) {
-    const body = request.body();
+    const body = await request.validate(DriverValidator);
     const theDriver: Driver = await Driver.create(body);
     return theDriver;
   }
 
   public async update({ params, request }: HttpContextContract) {
     const theDriver: Driver = await Driver.findOrFail(params.id);
-    const data = request.body();
+    const data = await request.validate(DriverValidator);
     theDriver.merge(data);
     return await theDriver.save();
   }

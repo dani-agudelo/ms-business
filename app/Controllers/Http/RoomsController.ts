@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-
 import Room from 'App/Models/Room';
+import RoomValidator from 'App/Validators/RoomValidator';
 
 export default class RoomsController {
     
@@ -22,14 +22,14 @@ export default class RoomsController {
 
     }
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
+        const body = await request.validate(RoomValidator);
         const theRoom: Room = await Room.create(body);
         return theRoom;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theRoom: Room = await Room.findOrFail(params.id);
-        const data = request.body();
+        const data = await request.validate(RoomValidator);
         theRoom.merge(data);
         return await theRoom.save();
     }

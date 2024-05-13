@@ -32,7 +32,16 @@ export default class CustomersController {
             },
           );
           const { _id, name, email } = res.data;
-          customers.push({ id: customer.id, user_id: _id, name, email });
+          const { id, document, phone, gender } = customer;
+          customers.push({
+            id,
+            user_id: _id,
+            name,
+            email,
+            document,
+            phone,
+            gender,
+          });
         }),
       );
 
@@ -53,7 +62,16 @@ export default class CustomersController {
           },
         );
         const { _id, name, email } = res.data;
-        customers[index] = { id: customer.id, user_id: _id, name, email };
+        const { id, document, phone, gender } = customer;
+        customers[index] = {
+          id,
+          user_id: _id,
+          name,
+          email,
+          document,
+          phone,
+          gender,
+        };
       }),
     );
 

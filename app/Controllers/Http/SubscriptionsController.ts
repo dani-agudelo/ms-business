@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Subscription from "App/Models/Subscription";
+import SubscriptionValidator from 'App/Validators/SubscriptionValidator';
 
 export default class SubscriptionsController {
     public async find({ request, params }: HttpContextContract) {
@@ -20,7 +21,7 @@ export default class SubscriptionsController {
         }
       }
       public async create({ request }: HttpContextContract) {
-        const body = request.body();
+        const body = await request.validate(SubscriptionValidator);
         const theSubscription: Subscription =
           await Subscription.create(body);
         return theSubscription;
@@ -29,7 +30,7 @@ export default class SubscriptionsController {
       public async update({ params, request }: HttpContextContract) {
         const theSubscription: Subscription =
           await Subscription.findOrFail(params.id);
-        const data = request.body();
+        const data = await request.validate(SubscriptionValidator);
         theSubscription.merge(data);
         return await theSubscription.save();
       }

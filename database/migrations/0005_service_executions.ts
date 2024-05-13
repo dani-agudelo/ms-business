@@ -9,14 +9,14 @@ export default class extends BaseSchema {
       table
         .integer("customer_id")
         .unsigned()
-        .references("customers.id").onDelete('CASCADE').onUpdate('CASCADE');
+        .references("customers.id")
+        .onUpdate("CASCADE");
       table
         .integer("service_id")
         .unsigned()
-        .references("services.id").onDelete('CASCADE').onUpdate('CASCADE'); 
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
+        .references("services.id")
+        .onUpdate("CASCADE");
+
       table.timestamp("created_at", { useTz: true });
       table.timestamp("updated_at", { useTz: true });
     });

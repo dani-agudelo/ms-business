@@ -5,6 +5,7 @@ import axios from "axios";
 
 import Env from "@ioc:Adonis/Core/Env";
 import { ModelObject } from "@ioc:Adonis/Lucid/Orm";
+import CustomerValidator from "App/Validators/CustomerValidator";
 
 export default class CustomersController {
   public async find({ request, params }: HttpContextContract) {
@@ -13,6 +14,7 @@ export default class CustomersController {
 
     if (params.id) {
       const theCustomer: Customer = await Customer.findOrFail(params.id);
+
       customers.push(theCustomer);
     } else if (page && per_page) {
       const { meta, data } = await Customer.query()
@@ -51,7 +53,7 @@ export default class CustomersController {
           },
         );
         const { _id, name, email } = res.data;
-      customers[index] = { id: customer.id, user_id: _id, name, email };
+        customers[index] = { id: customer.id, user_id: _id, name, email };
       }),
     );
 
@@ -59,7 +61,7 @@ export default class CustomersController {
   }
 
   public async create({ request }: HttpContextContract) {
-    const body = request.body();
+    const body = await request.validate(CustomerValidator);
     const theCustomer: Customer = await Customer.create(body);
     return theCustomer;
   }

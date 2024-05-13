@@ -28,6 +28,9 @@ export default class Sepulture extends BaseModel {
   @column()
   public service_id: number
 
+  @column()
+  public room_id: number;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

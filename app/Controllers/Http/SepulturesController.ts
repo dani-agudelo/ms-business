@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Sepulture from 'App/Models/Sepulture';
+import SepultureValidator from 'App/Validators/SepultureValidator';
 
 export default class SepulturesController {
     
@@ -21,14 +22,14 @@ export default class SepulturesController {
 
     }
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
+        const body = await request.validate(SepultureValidator);
         const theSepulture: Sepulture = await Sepulture.create(body);
         return theSepulture;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theSepulture: Sepulture = await Sepulture.findOrFail(params.id);
-        const data = request.body();
+        const data = await request.validate(SepultureValidator);
         theSepulture.merge(data);
         return await theSepulture.save();
     }

@@ -1,5 +1,6 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Relocation from "App/Models/Relocation";
+import RelocationValidator from "App/Validators/RelocationValidator";
 
 export default class relocationsController {
   public async find({ request, params }: HttpContextContract) {
@@ -18,13 +19,13 @@ export default class relocationsController {
   }
 
   public async create({ request }: HttpContextContract) {
-    const data = request.body();
+    const data = await request.validate(RelocationValidator);
     return await Relocation.create(data);
   }
 
   public async update({ request, params }: HttpContextContract) {
-    const data = request.body();
     const relocation: Relocation = await Relocation.findOrFail(params.id);
+    const data = await request.validate(RelocationValidator);
     relocation.merge(data);
     return await relocation.save();
   }

@@ -21,7 +21,7 @@ export default class RelocationValidator {
     ]),
     price: schema.number([
       rules.required(),
-      rules.range(1, 10000),
+      rules.unsigned(),
     ]),
     is_available: schema.boolean(),
     service_id: schema.number([

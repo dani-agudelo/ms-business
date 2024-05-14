@@ -1,5 +1,6 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { ModelObject } from "@ioc:Adonis/Lucid/Orm";
+import Beneficiary from "App/Models/Beneficiary";
 import Owner from "App/Models/Owner";
 import OwnerValidator from "App/Validators/OwnerValidator";
 
@@ -70,6 +71,14 @@ export default class OwnersController {
 
   public async delete({ params, response }: HttpContextContract) {
     const theOwner: Owner = await Owner.findOrFail(params.id);
+    const theBeneficiaries: Beneficiary[] = await theOwner
+      .related("beneficiaries")
+      .query();
+
+    if (theBeneficiaries.length > 0) {
+      response.status(400);
+      return { message: "Owner has beneficiaries" };
+    }
     response.status(204);
     return await theOwner.delete();
   }

@@ -11,6 +11,7 @@ export default class AdministratorsController {
   public async find({ request, params }: HttpContextContract) {
     const administrators: ModelObject[] = [];
     const { page, per_page } = request.only(["page", "per_page"]);
+    const metaAux: ModelObject[] = [];
 
     if (params.id) {
       const theAdministrator: Administrator = await Administrator.findOrFail(
@@ -22,27 +23,8 @@ export default class AdministratorsController {
         .paginate(page, per_page)
         .then((res) => res.toJSON());
 
-      await Promise.all(
-        data.map(async (Administrator: Administrator) => {
-          const res = await axios.get(
-            `${Env.get("MS_SECURITY")}/api/users/email/${Administrator.email}`,
-            {
-              headers: {
-                Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
-              },
-            },
-          );
-          const { _id, name, email } = res.data;
-          administrators.push({
-            id: Administrator.id,
-            user_id: _id,
-            name,
-            email,
-          });
-        }),
-      );
-
-      return { meta, data: administrators };
+      metaAux.push(meta);
+      administrators.push(...data);
     } else {
       const allAdministrators = await Administrator.all();
       administrators.push(...allAdministrators.map((c) => c.toJSON()));
@@ -69,6 +51,10 @@ export default class AdministratorsController {
         },
       ),
     );
+
+    if (metaAux.length > 0) {
+      return { meta: metaAux, data: administrators };
+    }
 
     return administrators;
   }

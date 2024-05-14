@@ -8,8 +8,9 @@ import DriverValidator from "App/Validators/DriverValidator";
 
 export default class DriversController {
   public async find({ request, params }: HttpContextContract) {
-    const drivers: ModelObject[] = [];
     const { page, per_page } = request.only(["page", "per_page"]);
+    const drivers: ModelObject[] = [];
+    const metaAux: ModelObject[] = [];
 
     if (params.id) {
       const theDriver: Driver = await Driver.findOrFail(params.id);
@@ -19,22 +20,8 @@ export default class DriversController {
         .paginate(page, per_page)
         .then((res) => res.toJSON());
 
-      await Promise.all(
-        data.map(async (Driver: Driver) => {
-          const res = await axios.get(
-            `${Env.get("MS_SECURITY")}/api/users/email/${Driver.email}`,
-            {
-              headers: {
-                Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
-              },
-            },
-          );
-          const { _id, name, email } = res.data;
-          drivers.push({ id: Driver.id, user_id: _id, name, email });
-        }),
-      );
-
-      return { meta, data: drivers };
+      metaAux.push(meta);
+      drivers.push(...data);
     } else {
       const allDrivers = await Driver.all();
       drivers.push(...allDrivers.map((c) => c.toJSON()));
@@ -54,6 +41,10 @@ export default class DriversController {
         drivers[index] = { id: Driver.id, user_id: _id, name, email };
       }),
     );
+
+    if (metaAux.length > 0) {
+      return { meta: metaAux, data: drivers };
+    }
 
     return drivers;
   }

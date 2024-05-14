@@ -82,7 +82,7 @@ export default class CustomersController {
   public async getSubscriptionByCustomer({ params }: HttpContextContract) {
     const theCustomer = await Customer.findOrFail(params.id);
     await theCustomer.load("subscriptions");
-    
+
     return Promise.all(
       theCustomer.subscriptions.map(async (s) => {
         await s.load("customer");
@@ -92,7 +92,7 @@ export default class CustomersController {
           start_date: s.startDate,
           end_date: s.endDate,
           monthly_fee: s.monthlyFee,
-          is_paid: s.isPaid
+          is_paid: s.isPaid,
         };
       }),
     );

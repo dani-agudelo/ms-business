@@ -21,10 +21,10 @@ export default class SubscriptionValidator {
       rules.exists({ table: 'plans', column: 'id' }),
     ]),
     start_date: schema.date({
-      format: 'yyyy-MM-dd',
+      format: 'yyyy-MM-dd HH:mm:ss',
     }),
     end_date: schema.date({
-      format: 'yyyy-MM-dd',
+      format: 'yyyy-MM-dd HH:mm:ss',
     }),
     monthly_fee: schema.number([
       rules.required(),

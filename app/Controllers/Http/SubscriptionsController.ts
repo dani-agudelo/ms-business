@@ -41,4 +41,24 @@ export default class SubscriptionsController {
         response.status(204);
         return await theSubscription.delete();
       }
+
+      public async getPaymentsBySubscription({ params }: HttpContextContract) {
+        const theSubscription = await Subscription.findOrFail(params.id);
+        await theSubscription.load('payments');
+      
+        return Promise.all(
+          theSubscription.payments.map(async (p) => {
+            return {
+              id: p.id,
+              subscription_id: p.subscription_id,
+              amount: p.amount,
+              payment_date: p.paymentDate,
+              payment_method: p.paymentMethod,
+            };
+          }),
+        );
+      } 
+
+  
+
 }

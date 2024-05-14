@@ -30,6 +30,7 @@ export default class OwnersController {
 
     return owners.map((owner: Owner) => ({
       id: owner.id,
+      customer_id: owner.customer.id,
       name: owner.customer.name,
       email: owner.customer.email,
       document: owner.customer.document,

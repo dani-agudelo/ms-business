@@ -45,12 +45,14 @@ export default class SubscriptionsController {
       public async getPaymentsBySubscription({ params }: HttpContextContract) {
         const theSubscription = await Subscription.findOrFail(params.id);
         await theSubscription.load('payments');
+
+        console.log(theSubscription.payments);
       
         return Promise.all(
           theSubscription.payments.map(async (p) => {
             return {
               id: p.id,
-              subscription_id: p.subscription_id,
+              subscription_id: p.subscription,
               amount: p.amount,
               payment_date: p.paymentDate,
               payment_method: p.paymentMethod,

@@ -5,6 +5,7 @@
   ],
   "exclude": [
     "node_modules",
+    "jest.config.ts",
     "build"
   ],
   "compilerOptions": {

@@ -20,17 +20,17 @@ export default class SubscriptionValidator {
       rules.required(),
       rules.exists({ table: 'plans', column: 'id' }),
     ]),
-    startDate: schema.date({
+    start_date: schema.date({
       format: 'yyyy-MM-dd',
     }),
-    endDate: schema.date({
+    end_date: schema.date({
       format: 'yyyy-MM-dd',
     }),
-    monthlyFee: schema.number([
+    monthly_fee: schema.number([
       rules.required(),
       rules.range(0, 999999999),
     ]),
-    isPaid: schema.boolean(),
+    is_paid: schema.boolean(),
   })
 
 

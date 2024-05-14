@@ -59,6 +59,17 @@ export default class CustomersController {
     return customers;
   }
 
+  public async getChatByServiceExecution({ params }: HttpContextContract) {
+    return Customer.findOrFail(params.id).then((customer) =>
+      customer
+        .related("serviceExecutions")
+        .query()
+        .where("id", params.service_execution_id)
+        .first()
+        .then((serviceExecution) => serviceExecution?.related("chat")),
+    );
+  }
+
   public async create({ request }: HttpContextContract) {
     const body = await request.validate(CustomerValidator);
     const theCustomer: Customer = await Customer.create(body);

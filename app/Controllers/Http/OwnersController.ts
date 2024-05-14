@@ -38,7 +38,6 @@ export default class OwnersController {
   }
 
   public async getBeneficiaries({ params }: HttpContextContract) {
-    console.log(params);
     const theOwner: Owner = await Owner.findOrFail(params.id);
     await theOwner.load("beneficiaries");
 

@@ -13,6 +13,7 @@ export default class extends BaseSchema {
         .references("customers.id")
         .onDelete("CASCADE")
         .onUpdate("CASCADE");
+      table.string("age");
 
       table.timestamp("created_at", { useTz: true });
       table.timestamp("updated_at", { useTz: true });

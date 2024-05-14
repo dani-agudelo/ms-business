@@ -13,6 +13,9 @@ export default class Beneficiary extends BaseModel {
   @column()
   public owner_id: number;
 
+  @column()
+  public age: number;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

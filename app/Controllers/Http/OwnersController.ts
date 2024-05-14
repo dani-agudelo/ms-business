@@ -11,23 +11,19 @@ export default class OwnersController {
 
     if (params.id) {
       const theOwner: Owner = await Owner.findOrFail(params.id);
-      await theOwner.load("beneficiaries");
       await theOwner.load("customer");
       owners.push(theOwner);
     } else if (page && per_page) {
       const page = request.input("page", 1);
       const perPage = request.input("per_page", 20);
       const { meta, data } = await Owner.query()
-        .preload("beneficiaries")
         .preload("customer")
         .paginate(page, perPage)
         .then((res) => res.toJSON());
       metaAux.push(meta);
       owners.push(...data);
     } else {
-      const allOwners = await Owner.query()
-        .preload("beneficiaries")
-        .preload("customer");
+      const allOwners = await Owner.query().preload("customer");
       owners.push(...allOwners.map((o) => o.toJSON()));
     }
 
@@ -38,8 +34,26 @@ export default class OwnersController {
       document: owner.customer.document,
       start_date: owner.start_date,
       end_date: owner.end_date,
-      beneficiaries: owner.beneficiaries,
     }));
+  }
+
+  public async getBeneficiaries({ params }: HttpContextContract) {
+    console.log(params);
+    const theOwner: Owner = await Owner.findOrFail(params.id);
+    await theOwner.load("beneficiaries");
+
+    return Promise.all(
+      theOwner.beneficiaries.map(async (b) => {
+        await b.load("customer");
+        return {
+          id: b.id,
+          name: b.customer.name,
+          email: b.customer.email,
+          document: b.customer.document,
+          age: b.age,
+        };
+      }),
+    );
   }
 
   public async create({ request }: HttpContextContract) {

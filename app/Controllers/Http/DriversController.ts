@@ -66,7 +66,7 @@ export default class DriversController {
 
   public async update({ params, request }: HttpContextContract) {
     const theDriver: Driver = await Driver.findOrFail(params.id);
-    const data = await request.validate(DriverValidator);
+    const data = request.body();
     theDriver.merge(data);
     return await theDriver.save();
   }

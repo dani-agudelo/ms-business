@@ -69,7 +69,7 @@ export default class AdministratorsController {
     const theAdministrator: Administrator = await Administrator.findOrFail(
       params.id,
     );
-    const data = await request.validate(AdministratorValidator);
+    const data = request.body();
     theAdministrator.merge(data);
     return await theAdministrator.save();
   }

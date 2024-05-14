@@ -29,7 +29,7 @@ export default class RoomsController {
 
     public async update({ params, request }: HttpContextContract) {
         const theRoom: Room = await Room.findOrFail(params.id);
-        const data = await request.validate(RoomValidator);
+        const data = request.body();
         theRoom.merge(data);
         return await theRoom.save();
     }

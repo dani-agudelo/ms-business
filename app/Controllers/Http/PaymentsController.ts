@@ -29,7 +29,7 @@ export default class PaymentsController {
       public async update({ params, request }: HttpContextContract) {
         const thePayment: Payment =
           await Payment.findOrFail(params.id);
-        const data = await request.validate(PaymentValidator);
+        const data = request.body();
         thePayment.merge(data);
         return await thePayment.save();
       }

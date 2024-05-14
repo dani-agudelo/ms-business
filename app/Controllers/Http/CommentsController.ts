@@ -29,7 +29,7 @@ export default class CommentsController {
 
     public async update({ params, request }: HttpContextContract) {
         const theComment: Comment = await Comment.findOrFail(params.id);
-        const data = await request.validate(CommentValidator);
+        const data = request.body();
         theComment.merge(data);
         return await theComment.save();
     }

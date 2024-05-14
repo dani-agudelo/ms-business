@@ -25,7 +25,7 @@ export default class relocationsController {
 
   public async update({ request, params }: HttpContextContract) {
     const relocation: Relocation = await Relocation.findOrFail(params.id);
-    const data = await request.validate(RelocationValidator);
+    const data = request.body();
     relocation.merge(data);
     return await relocation.save();
   }

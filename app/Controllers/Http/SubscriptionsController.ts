@@ -30,7 +30,7 @@ export default class SubscriptionsController {
       public async update({ params, request }: HttpContextContract) {
         const theSubscription: Subscription =
           await Subscription.findOrFail(params.id);
-        const data = await request.validate(SubscriptionValidator);
+        const data = request.body();
         theSubscription.merge(data);
         return await theSubscription.save();
       }

@@ -12,6 +12,8 @@ export default class extends BaseSchema {
         .references("customers.id")
         .onDelete("CASCADE")
         .onUpdate("CASCADE");
+      table.date("start_date");
+      table.date("end_date");
 
       table.timestamp("created_at", { useTz: true });
       table.timestamp("updated_at", { useTz: true });

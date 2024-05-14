@@ -12,7 +12,7 @@ export default class CustomerValidator {
         where: { id: this.ctx.request.input("id") },
       }),
     ]),
-    // name: schema.string(),
+    name: schema.string(),
     email: schema.string([
       rules.email(),
       rules.unique({ table: "customers", column: "email" }),

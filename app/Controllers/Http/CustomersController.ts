@@ -9,43 +9,20 @@ import CustomerValidator from "App/Validators/CustomerValidator";
 
 export default class CustomersController {
   public async find({ request, params }: HttpContextContract) {
-    const customers: ModelObject[] = [];
     const { page, per_page } = request.only(["page", "per_page"]);
+    const customers: ModelObject[] = [];
+    const metaAux: ModelObject[] = [];
 
     if (params.id) {
       const theCustomer: Customer = await Customer.findOrFail(params.id);
-
       customers.push(theCustomer);
     } else if (page && per_page) {
       const { meta, data } = await Customer.query()
         .paginate(page, per_page)
         .then((res) => res.toJSON());
 
-      await Promise.all(
-        data.map(async (customer: Customer) => {
-          const res = await axios.get(
-            `${Env.get("MS_SECURITY")}/api/users/email/${customer.email}`,
-            {
-              headers: {
-                Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
-              },
-            },
-          );
-          const { _id, name, email } = res.data;
-          const { id, document, phone, gender } = customer;
-          customers.push({
-            id,
-            user_id: _id,
-            name,
-            email,
-            document,
-            phone,
-            gender,
-          });
-        }),
-      );
-
-      return { meta, data: customers };
+      metaAux.push(meta);
+      customers.push(...data);
     } else {
       const allCustomers = await Customer.all();
       customers.push(...allCustomers.map((c) => c.toJSON()));
@@ -74,6 +51,10 @@ export default class CustomersController {
         };
       }),
     );
+
+    if (metaAux.length > 0) {
+      return { meta: metaAux, data: customers };
+    }
 
     return customers;
   }

@@ -17,6 +17,12 @@ export default class Owner extends BaseModel {
   @column()
   public customer_id: number;
 
+  @column.date()
+  public start_date: DateTime;
+
+  @column.date()
+  public end_date: DateTime;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

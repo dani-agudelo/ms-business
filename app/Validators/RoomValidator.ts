@@ -12,17 +12,14 @@ export default class RoomValidator {
         where: { id: this.ctx.request.input('id') },
       }),
     ]),
-    name: schema.string({}, [
-      rules.required(),
+    room_name: schema.string({}, [
       rules.minLength(1),
       rules.maxLength(255),
     ]),
-    capacity: schema.number([
-      rules.required(),
+    room_capacity: schema.number([
       rules.range(1, 100),
     ]),
     facilities: schema.string({}, [
-      rules.required(),
       rules.minLength(1),
       rules.maxLength(255),
     ]),

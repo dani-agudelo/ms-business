@@ -12,6 +12,7 @@ export default class CommentValidator {
         where: { id: this.ctx.request.input("id") },
       }),
     ]),
+    user_id: schema.string(),
     rating: schema.number([rules.range(1, 5)]),
     comment: schema.string({ trim: true }, [rules.maxLength(500)]),
     service_execution_id: schema.number([

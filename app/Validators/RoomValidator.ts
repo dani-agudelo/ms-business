@@ -15,6 +15,10 @@ export default class RoomValidator {
     room_name: schema.string({}, [
       rules.minLength(1),
       rules.maxLength(255),
+      rules.unique({
+        table: 'rooms',
+        column: 'room_name',
+      }),
     ]),
     room_capacity: schema.number([
       rules.range(1, 100),
@@ -32,5 +36,18 @@ export default class RoomValidator {
     ]),
   })
 
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'room_name.required': 'El nombre de la sala es requerido',
+    'room_name.minLength': 'El nombre de la sala debe tener al menos 1 caracter',
+    'room_name.maxLength': 'El nombre de la sala debe tener menos de 255 caracteres',
+    'room_name.unique': 'El nombre de la sala ya existe',
+    'room_capacity.required': 'La capacidad de la sala es requerida',
+    'room_capacity.range': 'La capacidad de la sala debe estar entre 1 y 100',
+    'facilities.required': 'Las instalaciones de la sala son requeridas',
+    'facilities.minLength': 'Las instalaciones de la sala deben tener al menos 1 caracter',
+    'facilities.maxLength': 'Las instalaciones de la sala deben tener menos de 255 caracteres',
+    'is_available.required': 'La disponibilidad de la sala es requerida',
+    'headquarter_id.required': 'La sede es requerida',
+    'headquarter_id.exists': 'La sede no existe',
+  }
 }

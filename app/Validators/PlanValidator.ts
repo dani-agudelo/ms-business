@@ -16,6 +16,7 @@ export default class PlanValidator {
       rules.required(),
       rules.minLength(3),
       rules.maxLength(255),
+      rules.unique({ table: "plans", column: "name" }),
     ]),
     description: schema.string.optional({}, [
       rules.minLength(3),

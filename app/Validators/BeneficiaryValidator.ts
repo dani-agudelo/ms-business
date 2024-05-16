@@ -14,6 +14,12 @@ export default class BeneficiaryValidator {
     ]),
     customer_id: schema.number([
       rules.exists({ table: "customers", column: "id" }),
+      // debe ser unico en la tabla beneficiaries
+      rules.unique({
+        table: "beneficiaries",
+        column: "customer_id",
+        where: { owner_id: this.ctx.request.input("owner_id") },
+      }),
     ]),
     owner_id: schema.number([
       rules.exists({ table: "owners", column: "id" }),

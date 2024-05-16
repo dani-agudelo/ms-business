@@ -10,6 +10,9 @@ export default class Service extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
 
+  @column()
+  public name_service: string;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

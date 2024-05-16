@@ -17,12 +17,12 @@ export default class PaymentValidator {
       rules.range(0, 999999999),
     ]
     ),
-    paymentMethod: schema.string( {}, [
+    payment_method: schema.string( {}, [
       rules.required(),
       rules.minLength(1),
       rules.maxLength(255),
     ]),
-    paymentDate: schema.date( {
+    payment_date: schema.date( {
       format: 'yyyy-MM-dd',
     }),
     subscription_id: schema.number( [

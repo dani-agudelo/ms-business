@@ -12,7 +12,7 @@ export default class Payment extends BaseModel {
   @column()
   public paymentMethod: string
 
-  @column()
+  @column.dateTime()
   public paymentDate: DateTime
 
   @column()

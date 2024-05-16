@@ -17,6 +17,7 @@ export default class OwnersController {
     } else if (page && per_page) {
       const page = request.input("page", 1);
       const perPage = request.input("per_page", 20);
+      // owner query encuentra todos los registros de la tabla owner    
       const { meta, data } = await Owner.query()
         .preload("customer")
         .paginate(page, perPage)

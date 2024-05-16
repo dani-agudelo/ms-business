@@ -29,10 +29,15 @@ export default class RelocationValidator {
     ),
     price: schema.number([rules.required(), rules.unsigned()]),
     is_available: schema.boolean(),
+
     service_id: schema.number([
       rules.required(),
       rules.exists({ table: "services", column: "id" }),
       rules.unique({ table: "relocations", column: "service_id" }),
+    // service_id no puede pertenecer a cremations ni sepultures
+    
+    
+      
     ]),
   });
 

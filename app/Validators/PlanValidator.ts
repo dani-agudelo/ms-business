@@ -31,6 +31,7 @@ export default class PlanValidator {
 
   public messages: CustomMessages = {
     "name.required": "El nombre es requerido.",
+    "name.unique": "El nombre ya existe.",
     "name.minLength": "El nombre debe tener al menos 3 caracteres.",
     "name.maxLength": "El nombre no puede exceder los 255 caracteres.",
     "description.minLength": "La descripción debe tener al menos 3 caracteres.",

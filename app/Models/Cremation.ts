@@ -10,7 +10,7 @@ export default class Cremation extends BaseModel {
   @column()
   public location: string;
 
-  @column()
+  @column.dateTime()
   public date: DateTime;
 
   @column()

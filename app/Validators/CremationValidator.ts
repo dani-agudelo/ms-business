@@ -42,5 +42,6 @@ export default class CremationValidator {
     "date.required": "El campo date es requerido",
     "price.required": "El campo price es requerido",
     "is_available.required": "El campo is_available es requerido",
+    "service_id.unique": "El campo service_id ya está en uso",
   };
 }

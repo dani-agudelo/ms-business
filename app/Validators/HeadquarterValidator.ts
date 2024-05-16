@@ -14,7 +14,7 @@ export default class HeadquarterValidator {
     ]),
     name: schema.string([rules.maxLength(255)]),
     adress: schema.string([rules.maxLength(255)]),
-    city: schema.string(),
+    city: schema.string([rules.maxLength(255), rules.required()]),
     phone: schema.string([rules.mobile({ locale: ["es-CO"] })]),
   });
 

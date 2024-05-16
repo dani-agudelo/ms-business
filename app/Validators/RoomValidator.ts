@@ -18,6 +18,7 @@ export default class RoomValidator {
       rules.unique({
         table: 'rooms',
         column: 'room_name',
+        where: { headquarter_id: this.ctx.request.input('headquarter_id') },
       }),
     ]),
     room_capacity: schema.number([

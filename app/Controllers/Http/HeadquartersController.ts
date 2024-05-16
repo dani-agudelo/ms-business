@@ -45,9 +45,9 @@ export default class HeadquartersController {
     return await headquarter.delete();
   }
 
-  public exitsCity = (city: string) => {
+  public async exitsCity(city: string) {
     return axios.get(
       `${Env.get("API_MAP_NATIONAL")}/?c_digo_dane_del_municipio=${city}`,
     );
-  };
+  }
 }

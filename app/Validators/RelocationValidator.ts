@@ -32,6 +32,7 @@ export default class RelocationValidator {
     service_id: schema.number([
       rules.required(),
       rules.exists({ table: "services", column: "id" }),
+      rules.unique({ table: "relocations", column: "service_id" }),
     ]),
   });
 

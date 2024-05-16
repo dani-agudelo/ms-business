@@ -41,6 +41,7 @@ export default class SepultureValidator {
     service_id: schema.number([
       rules.required(),
       rules.exists({ table: 'services', column: 'id' }),
+      rules.unique({ table: 'sepultures', column: 'service_id' }),
     ]),
     room_id: schema.number([
       rules.required(),

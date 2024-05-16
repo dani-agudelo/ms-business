@@ -3,6 +3,7 @@ import Headquarter from "App/Models/Headquarter";
 import axios from "axios";
 
 import Env from "@ioc:Adonis/Core/Env";
+import HeadquarterValidator from "App/Validators/HeadquarterValidator";
 
 export default class HeadquartersController {
   public async find({ request, params }: HttpContextContract) {
@@ -25,8 +26,8 @@ export default class HeadquartersController {
       return { message: "The city does not exist" };
     }
 
-    const data = request.body();
-    return await Headquarter.create(data);
+    const body = await request.validate(HeadquarterValidator);
+    return await Headquarter.create(body);
   }
 
   public async update({ request, params }: HttpContextContract) {
@@ -47,7 +48,8 @@ export default class HeadquartersController {
 
   public async exitsCity(city: string) {
     return axios.get(
+      // ? es un query parameter que se le pasa a la url
       `${Env.get("API_MAP_NATIONAL")}/?c_digo_dane_del_municipio=${city}`,
-    );
+    ).then((res) => res.data.length === 0);
   }
 }

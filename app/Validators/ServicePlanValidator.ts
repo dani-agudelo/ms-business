@@ -24,5 +24,10 @@ export default class ServicePlanValidator {
   })
 
  
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'service_id.required': 'El campo service_id es requerido',
+    'service_id.exists': 'El campo service_id no existe en la tabla services',
+    'plan_id.required': 'El campo plan_id es requerido',
+    'plan_id.exists': 'El campo plan_id no existe en la tabla plans',
+  }
 }

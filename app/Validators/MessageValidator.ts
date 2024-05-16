@@ -17,6 +17,7 @@ export default class MessageValidator {
       rules.minLength(1),
       rules.maxLength(255),
     ]),
+    user_id: schema.number(),
     content: schema.string({}, [rules.required(), rules.minLength(1)]),
     chat_id: schema.number([
       rules.required(),

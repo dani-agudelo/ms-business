@@ -13,6 +13,9 @@ export default class Message extends BaseModel {
   public content: string;
 
   @column()
+  public user_id: number;
+
+  @column()
   public chat_id: number;
 
   @column.dateTime({ autoCreate: true })

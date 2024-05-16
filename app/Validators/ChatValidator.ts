@@ -13,7 +13,6 @@ export default class ChatValidator {
       }),
     ]),
     status: schema.boolean(),
-    user_id: schema.number(),
     service_execution_id: schema.number([
       rules.exists({ table: "service_executions", column: "id" }),
     ]),

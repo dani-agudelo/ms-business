@@ -12,11 +12,11 @@ export default class CustomerValidator {
         where: { id: this.ctx.request.input("id") },
       }),
     ]),
-    name: schema.string(),
-    email: schema.string([
-      rules.email(),
-      rules.unique({ table: "customers", column: "email" }),
+    user_id: schema.string.optional([
+      rules.unique({ table: "customers", column: "user_id" }),
     ]),
+    name: schema.string(),
+    email: schema.string([rules.email()]),
     document: schema.string([
       rules.unique({ table: "customers", column: "document" }),
     ]),
@@ -27,7 +27,6 @@ export default class CustomerValidator {
     "name.required": "El campo name es requerido",
     "email.required": "El campo email es requerido",
     "email.email": "El campo email debe ser un correo válido",
-    "email.unique": "El campo email ya existe en la tabla customers",
     "document.required": "El campo document es requerido",
     "document.unique": "El campo document ya existe en la tabla customers",
     "phone.required": "El campo phone es requerido",

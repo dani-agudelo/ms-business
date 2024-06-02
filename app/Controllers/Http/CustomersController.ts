@@ -1,13 +1,14 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Customer from "App/Models/Customer";
-
-import axios from "axios";
-
-import Env from "@ioc:Adonis/Core/Env";
 import { ModelObject } from "@ioc:Adonis/Lucid/Orm";
 import CustomerValidator from "App/Validators/CustomerValidator";
+import UserService from "App/services/user_service";
+import { inject } from "@adonisjs/core/build/standalone";
 
+@inject([UserService])
 export default class CustomersController {
+  constructor(protected userService: UserService) {}
+
   public async find({ request, params }: HttpContextContract) {
     const { page, per_page } = request.only(["page", "per_page"]);
     const customers: ModelObject[] = [];
@@ -25,30 +26,14 @@ export default class CustomersController {
       customers.push(...data);
     } else {
       const allCustomers = await Customer.all();
-      customers.push(...allCustomers.map((c) => c.toJSON()));
+      customers.push(...allCustomers);
     }
 
     await Promise.all(
       customers.map(async (customer: Customer, index: number) => {
-        const res = await axios.get(
-          `${Env.get("MS_SECURITY")}/api/users/email/${customer.email}`,
-          {
-            headers: {
-              Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
-            },
-          },
-        );
-        const { _id, name, email } = res.data;
-        const { id, document, phone, gender } = customer;
-        customers[index] = {
-          id,
-          user_id: _id,
-          name,
-          email,
-          document,
-          phone,
-          gender,
-        };
+        const res = await this.userService.getUserById(customer.user_id);
+        const { name, email } = res.data;
+        customers[index] = { name, email, ...customer.toJSON() };
       }),
     );
 
@@ -59,20 +44,26 @@ export default class CustomersController {
     return customers;
   }
 
-  public async getChatByServiceExecution({ params }: HttpContextContract) {
-    return Customer.findOrFail(params.id).then((customer) =>
-      customer
-        .related("serviceExecutions")
-        .query()
-        .where("id", params.service_execution_id)
-        .first()
-        .then((serviceExecution) => serviceExecution?.related("chat")),
-    );
-  }
-
-  public async create({ request }: HttpContextContract) {
+  public async create({ request, response }: HttpContextContract) {
     const body = await request.validate(CustomerValidator);
-    const theCustomer: Customer = await Customer.create(body);
+    const user = { name: body.name, email: body.email };
+    let res: any;
+
+    try {
+      res = await this.userService.postUser(user);
+    } catch (error) {
+      return response.status(400).send({ message: error.message });
+    }
+
+    const customer = {
+      user_id: res.data.id,
+      name: body.name,
+      email: body.email,
+      document: body.document,
+      phone: body.phone,
+    };
+
+    const theCustomer: Customer = await Customer.create(customer);
     return theCustomer;
   }
 
@@ -87,6 +78,17 @@ export default class CustomersController {
     const theCustomer: Customer = await Customer.findOrFail(params.id);
     response.status(204);
     return await theCustomer.delete();
+  }
+
+  public async getChatByServiceExecution({ params }: HttpContextContract) {
+    return Customer.findOrFail(params.id).then((customer) =>
+      customer
+        .related("serviceExecutions")
+        .query()
+        .where("id", params.service_execution_id)
+        .first()
+        .then((serviceExecution) => serviceExecution?.related("chat")),
+    );
   }
 
   // get all subscriptions by customer

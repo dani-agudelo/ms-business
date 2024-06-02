@@ -14,4 +14,16 @@ export default class UserService {
   async postUser(user: any): Promise<any> {
     return axios.post(this.baseUrl, user, { headers: this.headers });
   }
+
+  async putUser(user_id: string, user: any): Promise<any> {
+    return axios.put(`${this.baseUrl}/${user_id}`, user, {
+      headers: this.headers,
+    });
+  }
+
+  async deleteUser(user_id: string): Promise<any> {
+    return axios.delete(`${this.baseUrl}/${user_id}`, {
+      headers: this.headers,
+    });
+  }
 }

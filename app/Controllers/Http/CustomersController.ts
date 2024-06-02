@@ -55,29 +55,53 @@ export default class CustomersController {
       return response.status(400).send({ message: error.message });
     }
 
-    const customer = {
-      user_id: res.data.id,
-      name: body.name,
-      email: body.email,
-      document: body.document,
-      phone: body.phone,
-    };
+    let customer: ModelObject = { user_id: res.data._id };
+    Object.keys(body).forEach(
+      (key) => Customer.$hasColumn(key) && (customer[key] = body[key]),
+    );
 
     const theCustomer: Customer = await Customer.create(customer);
     return theCustomer;
   }
 
-  public async update({ params, request }: HttpContextContract) {
+  public async update({ params, request, response }: HttpContextContract) {
     const theCustomer: Customer = await Customer.findOrFail(params.id);
-    const data = request.body();
-    theCustomer.merge(data);
+    const body = request.body();
+
+    try {
+      const user = { name: body.name, email: body.email };
+      await this.userService.putUser(theCustomer.user_id, user);
+    } catch (error) {
+      response.status(400).send({ message: "User not found" });
+    }
+
+    let newCustomer: ModelObject = {};
+    Object.keys(body).forEach(
+      (key) => Customer.$hasColumn(key) && (newCustomer[key] = body[key]),
+    );
+
+    theCustomer.merge(newCustomer);
     return await theCustomer.save();
   }
 
   public async delete({ params, response }: HttpContextContract) {
     const theCustomer: Customer = await Customer.findOrFail(params.id);
-    response.status(204);
-    return await theCustomer.delete();
+    const keys = [
+      "owners",
+      "beneficiaries",
+      "serviceExecutions",
+      "subscriptions",
+    ];
+
+    if (keys.some((key) => theCustomer[key])) {
+      return response.status(400).send({
+        message: "Customer has dependencies, cannot be deleted",
+      });
+    }
+
+    await this.userService.deleteUser(theCustomer.user_id);
+    await theCustomer.delete();
+    return response.status(204);
   }
 
   public async getChatByServiceExecution({ params }: HttpContextContract) {

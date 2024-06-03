@@ -1,13 +1,14 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Customer from "App/Models/Customer";
-
-import axios from "axios";
-
-import Env from "@ioc:Adonis/Core/Env";
 import { ModelObject } from "@ioc:Adonis/Lucid/Orm";
 import CustomerValidator from "App/Validators/CustomerValidator";
+import UserService from "App/services/user_service";
+import { inject } from "@adonisjs/core/build/standalone";
 
+@inject([UserService])
 export default class CustomersController {
+  constructor(protected userService: UserService) {}
+
   public async find({ request, params }: HttpContextContract) {
     const { page, per_page } = request.only(["page", "per_page"]);
     const customers: ModelObject[] = [];
@@ -25,30 +26,14 @@ export default class CustomersController {
       customers.push(...data);
     } else {
       const allCustomers = await Customer.all();
-      customers.push(...allCustomers.map((c) => c.toJSON()));
+      customers.push(...allCustomers);
     }
 
     await Promise.all(
       customers.map(async (customer: Customer, index: number) => {
-        const res = await axios.get(
-          `${Env.get("MS_SECURITY")}/api/users/email/${customer.email}`,
-          {
-            headers: {
-              Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
-            },
-          },
-        );
-        const { _id, name, email } = res.data;
-        const { id, document, phone, gender } = customer;
-        customers[index] = {
-          id,
-          user_id: _id,
-          name,
-          email,
-          document,
-          phone,
-          gender,
-        };
+        const res = await this.userService.getUserById(customer.user_id);
+        const { name, email } = res.data;
+        customers[index] = { name, email, ...customer.toJSON() };
       }),
     );
 
@@ -57,6 +42,66 @@ export default class CustomersController {
     }
 
     return customers;
+  }
+
+  public async create({ request, response }: HttpContextContract) {
+    const body = await request.validate(CustomerValidator);
+    const user = { name: body.name, email: body.email };
+    let res: any;
+
+    try {
+      res = await this.userService.postUser(user);
+    } catch (error) {
+      return response.status(400).send({ message: error.message });
+    }
+
+    let customer: ModelObject = { user_id: res.data._id };
+    Object.keys(body).forEach(
+      (key) => Customer.$hasColumn(key) && (customer[key] = body[key]),
+    );
+
+    const theCustomer: Customer = await Customer.create(customer);
+    return theCustomer;
+  }
+
+  public async update({ params, request, response }: HttpContextContract) {
+    const theCustomer: Customer = await Customer.findOrFail(params.id);
+    const body = request.body();
+
+    try {
+      const user = { name: body.name, email: body.email };
+      await this.userService.putUser(theCustomer.user_id, user);
+    } catch (error) {
+      response.status(400).send({ message: "User not found" });
+    }
+
+    let newCustomer: ModelObject = {};
+    Object.keys(body).forEach(
+      (key) => Customer.$hasColumn(key) && (newCustomer[key] = body[key]),
+    );
+
+    theCustomer.merge(newCustomer);
+    return await theCustomer.save();
+  }
+
+  public async delete({ params, response }: HttpContextContract) {
+    const theCustomer: Customer = await Customer.findOrFail(params.id);
+    const keys = [
+      "owners",
+      "beneficiaries",
+      "serviceExecutions",
+      "subscriptions",
+    ];
+
+    if (keys.some((key) => theCustomer[key])) {
+      return response.status(400).send({
+        message: "Customer has dependencies, cannot be deleted",
+      });
+    }
+
+    await this.userService.deleteUser(theCustomer.user_id);
+    await theCustomer.delete();
+    return response.status(204);
   }
 
   public async getChatByServiceExecution({ params }: HttpContextContract) {
@@ -68,25 +113,6 @@ export default class CustomersController {
         .first()
         .then((serviceExecution) => serviceExecution?.related("chat")),
     );
-  }
-
-  public async create({ request }: HttpContextContract) {
-    const body = await request.validate(CustomerValidator);
-    const theCustomer: Customer = await Customer.create(body);
-    return theCustomer;
-  }
-
-  public async update({ params, request }: HttpContextContract) {
-    const theCustomer: Customer = await Customer.findOrFail(params.id);
-    const data = request.body();
-    theCustomer.merge(data);
-    return await theCustomer.save();
-  }
-
-  public async delete({ params, response }: HttpContextContract) {
-    const theCustomer: Customer = await Customer.findOrFail(params.id);
-    response.status(204);
-    return await theCustomer.delete();
   }
 
   // get all subscriptions by customer

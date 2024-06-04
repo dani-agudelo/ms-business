@@ -115,14 +115,17 @@ export default class CustomersController {
     );
   }
 
-  // get all subscriptions by customer
   public async getSubscriptionByCustomer({ params }: HttpContextContract) {
     const theCustomer = await Customer.findOrFail(params.id);
+    // Cargamos las suscripciones del cliente
     await theCustomer.load("subscriptions");
 
+    // Devuelve un array de suscripciones
     return Promise.all(
       theCustomer.subscriptions.map(async (s) => {
+        // Cargamos el cliente de la suscripción
         await s.load("customer");
+        console.log(s);
         return {
           id: s.id,
           customer: s.customer_id,

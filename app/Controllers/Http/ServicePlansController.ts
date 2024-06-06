@@ -22,6 +22,21 @@ export default class ServicePlansController {
 
     }
 
+    async findServicePlanByPlan({ params }: HttpContextContract) {
+        return ServicePlan.query()
+          .where("plan_id", params.plan_id)
+          .preload("plan")
+          .then((servicePlan: ServicePlan[]) => {
+            return servicePlan.map((s) => {
+              return {
+                id: s.id,
+                plan_id: s.plan_id,
+                service_id: s.service_id,
+              };
+            });
+          });
+      }
+
     public async create({ request }: HttpContextContract) {
         const body = await request.validate(ServicePlanValidator);
         const theServicePlan: ServicePlan = await ServicePlan.create(body);

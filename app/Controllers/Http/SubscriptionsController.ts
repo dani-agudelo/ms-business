@@ -55,9 +55,14 @@ export default class SubscriptionsController {
   }
 
   public async delete({ params, response }: HttpContextContract) {
-    const theSubscription: Subscription = await Subscription.findOrFail(
-      params.id,
-    );
+    const theSubscription: Subscription = await Subscription.findOrFail(params.id);
+    // Carga la relación de pagos
+    await theSubscription.load('payments');
+
+    // Verifica si la suscripción tiene pagos
+    if (theSubscription.payments && theSubscription.payments.length > 0) {
+      return response.status(400).send({ message: 'No se puede eliminar una suscripción que tiene pagos.' });
+    }
     response.status(204);
     return await theSubscription.delete();
   }

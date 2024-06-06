@@ -37,6 +37,12 @@ export default class PlansController {
 
     public async delete({ params, response }: HttpContextContract) {
         const thePlan: Plan = await Plan.findOrFail(params.id);
+
+        await thePlan.load('servicePlans');
+        if (thePlan.servicePlans.length > 0) {
+            response.status(400);
+            return { message: 'No se puede eliminar el plan porque tiene servicios asociados' };
+        }
         response.status(204);
         return await thePlan.delete();
     }

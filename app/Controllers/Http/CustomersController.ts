@@ -114,46 +114,4 @@ export default class CustomersController {
     await theCustomer.delete();
     return response.status(204);
   }
-
-  public async getChatByServiceExecution({ params }: HttpContextContract) {
-    return Customer.findOrFail(params.id).then((customer) =>
-      customer
-        .related("serviceExecutions")
-        .query()
-        .where("id", params.service_execution_id)
-        .first()
-        .then((serviceExecution) => serviceExecution?.related("chat")),
-    );
-  }
-
-  public async getCommentByServiceExecution({ params }: HttpContextContract) {
-    return Customer.findOrFail(params.id).then((customer) =>
-      customer
-        .related("serviceExecutions")
-        .query()
-        .where("id", params.service_execution_id)
-        .first()
-        .then((serviceExecution) => serviceExecution?.related("comments")),
-    );
-  }
-
-  // get all subscriptions by customer
-  public async getSubscriptionByCustomer({ params }: HttpContextContract) {
-    const theCustomer = await Customer.findOrFail(params.id);
-    await theCustomer.load("subscriptions");
-
-    return Promise.all(
-      theCustomer.subscriptions.map(async (s) => {
-        await s.load("customer");
-        return {
-          id: s.id,
-          customer: s.customer_id,
-          start_date: s.startDate,
-          end_date: s.endDate,
-          monthly_fee: s.monthlyFee,
-          is_paid: s.isPaid,
-        };
-      }),
-    );
-  }
 }

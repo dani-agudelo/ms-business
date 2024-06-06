@@ -19,9 +19,15 @@ export default class ServiceExecutionsController {
       }
     }
   }
+
+  public findByCustomer({ params }: HttpContextContract) {
+    return ServiceExecution.query().where("customer_id", params.customer_id);
+  }
+
   public async create({ request }: HttpContextContract) {
     const body = await request.validate(ServiceExecutionValidator);
-    const theServiceExecution: ServiceExecution = await ServiceExecution.create(body);
+    const theServiceExecution: ServiceExecution =
+      await ServiceExecution.create(body);
     return theServiceExecution;
   }
 

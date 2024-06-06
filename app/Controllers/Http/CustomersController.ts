@@ -132,7 +132,6 @@ export default class CustomersController {
           start_date: s.startDate,
           end_date: s.endDate,
           monthly_fee: s.monthlyFee,
-          is_paid: s.isPaid,
         };
       }),
     );

@@ -31,20 +31,20 @@ export default class OwnersController {
       owners.push(...data);
     } else {
       const allOwners = await Owner.query().preload("customer");
-      owners.push(...allOwners.map((o) => o.toJSON()));
+      owners.push(...allOwners);
     }
 
-    return owners.map(async (owner: Owner) => {
-      let user = await this.userService.getUserById(owner.customer.user_id);
+    return await Promise.all(
+      owners.map(async (owner: Owner) => {
+        let user = await this.userService.getUserById(owner.customer.user_id);
 
-      return {
-        name: user.data.name,
-        email: user.data.email,
-        customer_id: owner.customer.id,
-        ...owner.customer.toJSON(),
-        ...owner.toJSON(),
-      };
-    });
+        return {
+          name: user.data.name,
+          email: user.data.email,
+          ...owner.toJSON(),
+        };
+      }),
+    );
   }
 
   public async getBeneficiaries({ params }: HttpContextContract) {
@@ -74,7 +74,10 @@ export default class OwnersController {
   public async update({ params, request }: HttpContextContract) {
     const theOwner: Owner = await Owner.findOrFail(params.id);
     const data = request.body();
-    theOwner.merge(data);
+    theOwner.merge({
+      start_date: data.start_date,
+      end_date: data.end_date,
+    });
     return await theOwner.save();
   }
 

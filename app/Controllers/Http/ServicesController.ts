@@ -19,6 +19,7 @@ export default class ServicesController {
     }
 
   }
+
   public async create({ request }: HttpContextContract) {
       const body = request.body();
       const theService: Service = await Service.create(body);

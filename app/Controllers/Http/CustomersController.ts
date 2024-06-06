@@ -44,8 +44,24 @@ export default class CustomersController {
     return customers;
   }
 
-  findWithoutOwner() {
-    return "findWithoutOwner";
+  public async findWithoutOwner() {
+    const customers: ModelObject[] = [];
+    const allCustomers = await Customer.query().doesntHave("owners");
+
+    await Promise.all(
+      allCustomers.map(async (customer: Customer) => {
+        const res = await this.userService.getUserById(customer.user_id);
+        const { name, email } = res.data;
+        customers.push({
+          name,
+          email,
+          id: customer.id,
+          document: customer.document,
+        });
+      }),
+    );
+
+    return customers;
   }
 
   public async create({ request, response }: HttpContextContract) {

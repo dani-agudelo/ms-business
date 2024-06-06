@@ -12,16 +12,11 @@ export default class AdministratorValidator {
         where: { id: this.ctx.request.input("id") },
       }),
     ]),
-    name: schema.string({}, [
-      rules.required(),
-      rules.minLength(3),
-      rules.maxLength(255),
+    user_id: schema.string.optional([
+      rules.unique({ table: "customers", column: "user_id" }),
     ]),
-    email: schema.string({}, [
-      rules.required(),
-      rules.email(),
-      rules.unique({ table: "administrators", column: "email" }),
-    ]),
+    name: schema.string(),
+    email: schema.string([rules.email()]),
     responsibility: schema.string({}, [
       rules.required(),
       rules.minLength(3),
@@ -31,12 +26,7 @@ export default class AdministratorValidator {
   });
 
   public messages: CustomMessages = {
-    "name.required": "El campo nombre es requerido",
-    "name.minLength": "El campo nombre debe tener al menos 3 caracteres",
-    "name.maxLength": "El campo nombre debe tener como máximo 255 caracteres",
-    "email.required": "El campo email es requerido",
     "email.email": "El campo email debe ser un correo válido",
-    "email.unique": "El campo email ya se encuentra registrado",
     "responsibility.required": "El campo responsabilidad es requerido",
     "responsibility.minLength":
       "El campo responsabilidad debe tener al menos 3 caracteres",

@@ -24,12 +24,21 @@ export default class PaymentValidator {
     ]),
     payment_date: schema.date( {
       format: 'yyyy-MM-dd',
-    }),
+    },
+    [
+      rules.unique({
+        table: 'payments',
+        column: 'payment_date',
+        where: { 'subscription_id': this.ctx.request.input('subscription_id') },
+      }),
+    ]),
     subscription_id: schema.number( [
       rules.required(),
       rules.exists({ table: 'subscriptions', column: 'id' }),
     ]),
   })
 
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'payment_date.unique': 'No puede haber dos pagos en la misma fecha para la misma suscripción.',
+  }
 }

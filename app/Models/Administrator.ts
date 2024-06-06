@@ -6,10 +6,7 @@ export default class Administrator extends BaseModel {
   public id: number;
 
   @column()
-  public name: string;
-
-  @column()
-  public email: string;
+  public user_id: string;
 
   @column()
   public responsibility: string;
@@ -22,6 +19,4 @@ export default class Administrator extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
-
-  // TEST
 }

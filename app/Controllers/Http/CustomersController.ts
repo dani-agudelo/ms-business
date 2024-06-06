@@ -86,14 +86,21 @@ export default class CustomersController {
 
   public async delete({ params, response }: HttpContextContract) {
     const theCustomer: Customer = await Customer.findOrFail(params.id);
-    const keys = [
+    const keys: string[] = [
       "owners",
       "beneficiaries",
       "serviceExecutions",
       "subscriptions",
     ];
 
-    if (keys.some((key) => theCustomer[key])) {
+    const hasDependencies = await Promise.all(
+      keys.map(async (key: any) => {
+        await theCustomer.load(key);
+        return theCustomer[key].length > 0;
+      }),
+    );
+
+    if (hasDependencies.some((d) => d)) {
       return response.status(400).send({
         message: "Customer has dependencies, cannot be deleted",
       });
@@ -102,36 +109,5 @@ export default class CustomersController {
     await this.userService.deleteUser(theCustomer.user_id);
     await theCustomer.delete();
     return response.status(204);
-  }
-
-  public async getChatByServiceExecution({ params }: HttpContextContract) {
-    return Customer.findOrFail(params.id).then((customer) =>
-      customer
-        .related("serviceExecutions")
-        .query()
-        .where("id", params.service_execution_id)
-        .first()
-        .then((serviceExecution) => serviceExecution?.related("chat")),
-    );
-  }
-
-  // get all subscriptions by customer
-  public async getSubscriptionByCustomer({ params }: HttpContextContract) {
-    const theCustomer = await Customer.findOrFail(params.id);
-    await theCustomer.load("subscriptions");
-
-    return Promise.all(
-      theCustomer.subscriptions.map(async (s) => {
-        await s.load("customer");
-        return {
-          id: s.id,
-          customer: s.customer_id,
-          start_date: s.startDate,
-          end_date: s.endDate,
-          monthly_fee: s.monthlyFee,
-          is_paid: s.isPaid,
-        };
-      }),
-    );
   }
 }

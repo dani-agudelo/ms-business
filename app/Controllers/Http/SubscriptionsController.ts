@@ -21,6 +21,11 @@ export default class SubscriptionsController {
       }
     }
   }
+
+  findSubscriptionByCustomer({ params }: HttpContextContract) {
+    return Subscription.query().where("customer_id", params.customer_id);
+  }
+
   public async create({ request }: HttpContextContract) {
     const body = await request.validate(SubscriptionValidator);
     const theSubscription: Subscription = await Subscription.create(body);
@@ -28,7 +33,9 @@ export default class SubscriptionsController {
   }
 
   public async update({ params, request }: HttpContextContract) {
-    const theSubscription: Subscription = await Subscription.findOrFail(params.id);
+    const theSubscription: Subscription = await Subscription.findOrFail(
+      params.id,
+    );
     const data = request.body();
     theSubscription.merge(data);
     return await theSubscription.save();

@@ -22,8 +22,21 @@ export default class SubscriptionsController {
     }
   }
 
-  findSubscriptionByCustomer({ params }: HttpContextContract) {
-    return Subscription.query().where("customer_id", params.customer_id);
+  async findSubscriptionByCustomer({ params }: HttpContextContract) {
+    return Subscription.query()
+      .where("customer_id", params.customer_id)
+      .preload("customer")
+      .then((subs: Subscription[]) => {
+        return subs.map((s) => {
+          return {
+            id: s.id,
+            customer_id: s.customer_id,
+            start_date: s.startDate,
+            end_date: s.endDate,
+            monthly_fee: s.monthlyFee,
+          };
+        });
+      });
   }
 
   public async create({ request }: HttpContextContract) {
@@ -42,16 +55,9 @@ export default class SubscriptionsController {
   }
 
   public async delete({ params, response }: HttpContextContract) {
-    const theSubscription: Subscription = await Subscription.findOrFail(params.id);
-    
-    // Carga la relación de pagos
-    await theSubscription.load('payments');
-  
-    // Verifica si la suscripción tiene pagos
-    if (theSubscription.payments && theSubscription.payments.length > 0) {
-      return response.status(400).send({ message: 'No se puede eliminar una suscripción que tiene pagos.' });
-    }
-  
+    const theSubscription: Subscription = await Subscription.findOrFail(
+      params.id,
+    );
     response.status(204);
     return await theSubscription.delete();
   }
@@ -62,11 +68,9 @@ export default class SubscriptionsController {
 
     return Promise.all(
       theSubscription.payments.map(async (p) => {
-        await p.load("subscription");
-        console.log(p);
         return {
           id: p.id,
-          subscription_id: p.subscription_id,
+          subscription_id: p.subscription,
           amount: p.amount,
           payment_date: p.paymentDate,
           payment_method: p.paymentMethod,

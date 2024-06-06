@@ -30,9 +30,6 @@ export default class Subscription extends BaseModel {
   @column()
   public monthlyFee: number;
 
-  @column()
-  public isPaid: boolean;
-
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

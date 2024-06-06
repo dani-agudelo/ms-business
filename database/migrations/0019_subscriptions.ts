@@ -11,7 +11,6 @@ export default class extends BaseSchema {
       table.dateTime('start_date').notNullable()
       table.dateTime('end_date').notNullable()
       table.float('monthly_fee').notNullable()
-      table.boolean('is_paid').notNullable()
   
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

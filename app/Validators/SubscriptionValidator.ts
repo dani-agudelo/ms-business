@@ -22,18 +22,17 @@ export default class SubscriptionValidator {
     ]),
     start_date: schema.date(
       {
-        format: "yyyy-MM-dd HH:mm:ss",
+        format: "yyyy-MM-dd",
       },
       [rules.required(), rules.after("today")],
     ),
     end_date: schema.date(
       {
-        format: "yyyy-MM-dd HH:mm:ss",
+        format: "yyyy-MM-dd",
       },
       [rules.afterField("start_date")],
     ),
     monthly_fee: schema.number([rules.required(), rules.range(0, 999999999)]),
-    is_paid: schema.boolean(),
   });
 
   public messages: CustomMessages = {};

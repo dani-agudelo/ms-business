@@ -86,14 +86,21 @@ export default class CustomersController {
 
   public async delete({ params, response }: HttpContextContract) {
     const theCustomer: Customer = await Customer.findOrFail(params.id);
-    const keys = [
+    const keys: string[] = [
       "owners",
       "beneficiaries",
       "serviceExecutions",
       "subscriptions",
     ];
 
-    if (keys.some((key) => theCustomer[key])) {
+    const hasDependencies = await Promise.all(
+      keys.map(async (key: any) => {
+        await theCustomer.load(key);
+        return theCustomer[key].length > 0;
+      }),
+    );
+
+    if (hasDependencies.some((d) => d)) {
       return response.status(400).send({
         message: "Customer has dependencies, cannot be deleted",
       });

@@ -21,7 +21,9 @@ export default class ServiceExecutionsController {
   }
 
   public findByCustomer({ params }: HttpContextContract) {
-    return ServiceExecution.query().where("customer_id", params.customer_id);
+    return ServiceExecution.query()
+      .where("customer_id", params.customer_id)
+      .preload("service");
   }
 
   public async create({ request }: HttpContextContract) {

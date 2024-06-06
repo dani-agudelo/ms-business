@@ -1,10 +1,15 @@
+import { inject } from "@adonisjs/core/build/standalone";
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { ModelObject } from "@ioc:Adonis/Lucid/Orm";
 import Beneficiary from "App/Models/Beneficiary";
 import Owner from "App/Models/Owner";
+import UserService from "App/services/user_service";
 import OwnerValidator from "App/Validators/OwnerValidator";
 
+@inject([UserService])
 export default class OwnersController {
+  constructor(protected userService: UserService) {}
+
   public async find({ request, params }: HttpContextContract) {
     const { page, per_page } = request.only(["page", "per_page"]);
     const owners: ModelObject[] = [];
@@ -17,7 +22,7 @@ export default class OwnersController {
     } else if (page && per_page) {
       const page = request.input("page", 1);
       const perPage = request.input("per_page", 20);
-      // owner query encuentra todos los registros de la tabla owner    
+      // owner query encuentra todos los registros de la tabla owner
       const { meta, data } = await Owner.query()
         .preload("customer")
         .paginate(page, perPage)
@@ -29,15 +34,17 @@ export default class OwnersController {
       owners.push(...allOwners.map((o) => o.toJSON()));
     }
 
-    return owners.map((owner: Owner) => ({
-      id: owner.id,
-      customer_id: owner.customer.id,
-      name: owner.customer.name,
-      email: owner.customer.email,
-      document: owner.customer.document,
-      start_date: owner.start_date,
-      end_date: owner.end_date,
-    }));
+    return owners.map(async (owner: Owner) => {
+      let user = await this.userService.getUserById(owner.customer.user_id);
+
+      return {
+        name: user.data.name,
+        email: user.data.email,
+        customer_id: owner.customer.id,
+        ...owner.customer.toJSON(),
+        ...owner.toJSON(),
+      };
+    });
   }
 
   public async getBeneficiaries({ params }: HttpContextContract) {

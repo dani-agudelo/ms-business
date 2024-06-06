@@ -44,6 +44,10 @@ export default class CustomersController {
     return customers;
   }
 
+  findWithoutOwner() {
+    return "findWithoutOwner";
+  }
+
   public async create({ request, response }: HttpContextContract) {
     const body = await request.validate(CustomerValidator);
     const user = { name: body.name, email: body.email };

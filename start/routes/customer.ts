@@ -10,6 +10,10 @@ Route.group(() => {
     "/:id/service_executions/:service_execution_id/chats",
     "CustomersController.getChatByServiceExecution",
   );
+  Route.get(
+    "/:id/service_executions/:service_execution_id/comments",
+    "CustomersController.getCommentByServiceExecution",
+  );
   Route.post("/", "CustomersController.create");
   Route.put("/:id", "CustomersController.update");
   Route.delete("/:id", "CustomersController.delete");

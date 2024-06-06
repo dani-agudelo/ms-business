@@ -115,6 +115,17 @@ export default class CustomersController {
     );
   }
 
+  public async getCommentByServiceExecution({ params }: HttpContextContract) {
+    return Customer.findOrFail(params.id).then((customer) =>
+      customer
+        .related("serviceExecutions")
+        .query()
+        .where("id", params.service_execution_id)
+        .first()
+        .then((serviceExecution) => serviceExecution?.related("comments")),
+    );
+  }
+
   // get all subscriptions by customer
   public async getSubscriptionByCustomer({ params }: HttpContextContract) {
     const theCustomer = await Customer.findOrFail(params.id);

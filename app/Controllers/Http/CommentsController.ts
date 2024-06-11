@@ -3,7 +3,7 @@ import Comment from 'App/Models/Comment';
 import CommentValidator from 'App/Validators/CommentValidator';
 
 export default class CommentsController {
-    
+
     public async find({ request, params }: HttpContextContract) {
         if (params.id) {
             let theComment: Comment = await Comment.findOrFail(params.id);
@@ -39,5 +39,12 @@ export default class CommentsController {
         response.status(204);
         return await theComment.delete();
     }
+
+    public async getCommentByServiceExecution({ params }: HttpContextContract) {
+    return await Comment.query().where(
+        "service_execution_id",
+        params.idServiceExecution,
+        );
+  }
 
 }

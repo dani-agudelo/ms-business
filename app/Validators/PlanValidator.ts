@@ -22,7 +22,7 @@ export default class PlanValidator {
       rules.minLength(3),
       rules.maxLength(500),
     ]),
-    typePlan: schema.string({}, [
+    type_plan: schema.string({}, [
       rules.required(),
       rules.minLength(3),
       rules.maxLength(255),

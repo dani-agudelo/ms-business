@@ -2,7 +2,7 @@ import { schema, CustomMessages, rules } from "@ioc:Adonis/Core/Validator";
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 export default class RelocationValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
     relocation_id: schema.number.optional([
@@ -25,7 +25,7 @@ export default class RelocationValidator {
       {
         format: "yyyy-MM-dd",
       },
-      [rules.required(), rules.after("today")],
+      [rules.required()],
     ),
     price: schema.number([rules.required(), rules.unsigned()]),
     is_available: schema.boolean(),
@@ -33,11 +33,14 @@ export default class RelocationValidator {
     service_id: schema.number([
       rules.required(),
       rules.exists({ table: "services", column: "id" }),
-      rules.unique({ table: "relocations", column: "service_id" }),
-    // service_id no puede pertenecer a cremations ni sepultures
-    
-    
-      
+      rules.unique({
+        table: "relocations", column: "service_id",
+        whereNot: this.ctx.params.id ? { id: this.ctx.params.id } : undefined,
+      }),
+      // service_id no puede pertenecer a cremations ni sepultures
+
+
+
     ]),
   });
 
@@ -49,7 +52,6 @@ export default class RelocationValidator {
     "destination.minLength": "El destino debe tener al menos 3 caracteres",
     "destination.maxLength": "El destino debe tener menos de 255 caracteres",
     "date.required": "La fecha es requerida",
-    "date.after": "La fecha debe ser posterior a hoy",
     "price.required": "El precio es requerido",
     "price.unsigned": "El precio debe ser un número positivo",
     "is_available.required": "La disponibilidad es requerida",

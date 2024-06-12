@@ -24,7 +24,7 @@ export default class SubscriptionValidator {
       {
         format: "yyyy-MM-dd",
       },
-      [rules.required(), rules.after("today")],
+      [rules.required()],
     ),
     end_date: schema.date(
       {

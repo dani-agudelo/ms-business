@@ -44,6 +44,12 @@ export default class ServiceExecutionsController {
   public async delete({ params, response }: HttpContextContract) {
     const theServiceExecution: ServiceExecution =
       await ServiceExecution.findOrFail(params.id);
+      await theServiceExecution.load('comments');
+      await theServiceExecution.load('chat');
+
+      if ((theServiceExecution.comments && theServiceExecution.comments.length > 0) || (theServiceExecution.chat)) {
+        return response.status(400).send({ message: 'No se puede eliminar, el servicio en ejecucion tiene comentarios o chats asociados' });
+      }
     response.status(204);
     return await theServiceExecution.delete();
   }

@@ -10,7 +10,7 @@ export default class Room extends BaseModel {
 
   @column()
   public room_name: string
-
+                                                        
   @column()
   public room_capacity: number
 

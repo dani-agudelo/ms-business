@@ -39,5 +39,4 @@ export default class SepulturesController {
         response.status(204);
         return await theSepulture.delete();
     }
-
 }

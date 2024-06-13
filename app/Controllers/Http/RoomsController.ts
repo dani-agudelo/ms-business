@@ -3,7 +3,7 @@ import Room from 'App/Models/Room';
 import RoomValidator from 'App/Validators/RoomValidator';
 
 export default class RoomsController {
-    
+
     public async find({ request, params }: HttpContextContract) {
         if (params.id) {
             let theRoom: Room = await Room.findOrFail(params.id);
@@ -40,4 +40,40 @@ export default class RoomsController {
         return await theRoom.delete();
     }
 
+    async getRoomsByHeadquarter({ params }: HttpContextContract) {
+        return Room.query()
+            .where("headquarter_id", params.headquarter_id)
+            .preload("headquarter")
+            .then((rooms: Room[]) => {
+                return rooms.map((r) => {
+                    return {
+                        id: r.id,
+                        headquarter_id: r.headquarter_id,
+                        room_name: r.room_name,
+                        room_capacity: r.room_capacity,
+                        facilities: r.facilities,
+                        is_available: r.is_available,
+                    };
+                });
+            });
+    }
+
+    async getSepulturesByRoom({ params }: HttpContextContract) {
+        const theRoom: Room = await Room.findOrFail(params.id);
+        await theRoom.load('sepultures');
+
+        return Promise.all(
+            theRoom.sepultures.map(async (sep) => {
+                return {
+                    id: sep.id,
+                    room_id: sep.room_id,
+                    description: sep.description,
+                    cemetery_name: sep.cemetery_name,
+                    sepulture_type: sep.sepulture_type,
+                    price: sep.price,
+                    is_available: sep.is_available,
+                };
+            }),
+        );
+    }
 }

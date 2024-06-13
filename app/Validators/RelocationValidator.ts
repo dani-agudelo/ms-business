@@ -32,11 +32,7 @@ export default class RelocationValidator {
 
     service_id: schema.number([
       rules.required(),
-      rules.exists({ table: "services", column: "id" }),
-      rules.unique({
-        table: "relocations", column: "service_id",
-        whereNot: this.ctx.params.id ? { id: this.ctx.params.id } : undefined,
-      }),
+      rules.exists({ table: "services", column: "id" })
       // service_id no puede pertenecer a cremations ni sepultures
 
 

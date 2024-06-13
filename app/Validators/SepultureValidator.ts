@@ -40,8 +40,7 @@ export default class SepultureValidator {
     is_available: schema.boolean.optional(),
     service_id: schema.number([
       rules.required(),
-      rules.exists({ table: 'services', column: 'id' }),
-      rules.unique({ table: 'sepultures', column: 'service_id' }),
+      rules.exists({ table: 'services', column: 'id' })
     ]),
     room_id: schema.number([
       rules.required(),

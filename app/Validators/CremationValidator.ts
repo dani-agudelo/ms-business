@@ -14,7 +14,6 @@ export default class CremationValidator {
     ]),
     service_id: schema.number([
       rules.exists({ table: "services", column: "id" }),
-      rules.unique({ table: "cremations", column: "service_id" }),
       rules.required(),
     ]),
     room_id: schema.number([

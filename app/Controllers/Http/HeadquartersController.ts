@@ -42,6 +42,12 @@ export default class HeadquartersController {
 
   public async delete({ params, response }: HttpContextContract) {
     const headquarter = await Headquarter.findOrFail(params.id);
+    await headquarter.load("rooms");
+    if (headquarter.rooms.length > 0) {
+      return response.status(400).send({
+        message: "La sede tiene salas asociadas, no se puede eliminar.",
+      });
+    }
     response.status(204);
     return await headquarter.delete();
   }
@@ -49,7 +55,7 @@ export default class HeadquartersController {
   public async exitsCity(city: string) {
     return axios.get(
       // ? es un query parameter que se le pasa a la url
-      `${Env.get("API_MAP_NATIONAL")}/?c_digo_dane_del_municipio=${city}`,
+      `${Env.get("API_MAP_NATIONAL")}/?municipio=${city}`,
     ).then((res) => res.data.length === 0);
   }
 }

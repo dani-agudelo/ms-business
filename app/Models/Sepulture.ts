@@ -8,9 +8,6 @@ export default class Sepulture extends BaseModel {
   public id: number
 
   @column()
-  public sepulture_name: string
-
-  @column()
   public description: string
  
   @column()

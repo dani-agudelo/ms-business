@@ -15,9 +15,12 @@ export default class ServicesController {
         } else {
             return await Service.query()
         }
-
     }
+  }
 
+  public async getServicesByName({ params }: HttpContextContract) { 
+    return Service.query()
+        .where("name_service", params.name_service)
   }
 
   public async create({ request }: HttpContextContract) {

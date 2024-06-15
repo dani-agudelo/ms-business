@@ -67,7 +67,6 @@ export default class RoomsController {
                 return {
                     id: sep.id,
                     room_id: sep.room_id,
-                    sepulture_name: sep.sepulture_name,
                     description: sep.description,
                     cemetery_name: sep.cemetery_name,
                     sepulture_type: sep.sepulture_type,

@@ -13,11 +13,6 @@ export default class SepultureValidator {
         where: { id: this.ctx.request.input('id') },
       }),
     ]),
-    sepulture_name: schema.string({}, [
-      rules.required(),
-      rules.minLength(1),
-      rules.maxLength(255),
-    ]),
     description: schema.string({}, [
       rules.required(),
       rules.minLength(1),

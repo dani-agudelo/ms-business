@@ -27,7 +27,7 @@ export default class CremationValidator {
         caseInsensitive: true,
       }),
     ]),
-    date: schema.date({ format: "yyyy-MM-dd HH:mm" }, [rules.required()]),
+    date: schema.date({ format: "yyyy-MM-dd" }, [rules.required()]),
     price: schema.number([rules.required()]),
     is_available: schema.boolean([rules.required()]),
   });

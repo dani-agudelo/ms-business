@@ -83,4 +83,22 @@ export default class RoomsController {
             }),
         );
     }
+
+    async getCremationsByRoom({ params }: HttpContextContract) {
+        const theRoom: Room = await Room.findOrFail(params.id);
+        await theRoom.load('cremations');
+
+        return Promise.all(
+            theRoom.cremations.map(async (crem) => {
+                return {
+                    id: crem.id,
+                    room_id: crem.room_id,
+                    location: crem.location,
+                    date: crem.date,
+                    price: crem.price,
+                    is_available: crem.is_available,
+                };
+            }),
+        );
+    }
 }

@@ -6,6 +6,7 @@ Route.group(() => {
     "/customer/:customer_id",
     "SubscriptionsController.findSubscriptionByCustomer",
   );
+  Route.get("/plan/:plan_id", "SubscriptionsController.findSubscriptionByPlan");
   Route.get(
     "/:id/payments",
     "SubscriptionsController.getPaymentsBySubscription",

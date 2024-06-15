@@ -36,6 +36,13 @@ export default class RoomsController {
 
     public async delete({ params, response }: HttpContextContract) {
         const theRoom: Room = await Room.findOrFail(params.id);
+        await theRoom.load('sepultures');
+        await theRoom.load('cremations');
+        if (theRoom.sepultures.length > 0 || theRoom.cremations.length > 0) {
+            return response.status(400).send({
+                message: "La sala tiene sepulturas o cremaciones asociadas, no se puede eliminar.",
+            });
+        }
         response.status(204);
         return await theRoom.delete();
     }

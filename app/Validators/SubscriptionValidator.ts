@@ -2,7 +2,7 @@ import { schema, CustomMessages, rules } from "@ioc:Adonis/Core/Validator";
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 export default class SubscriptionValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
     subscription_id: schema.number.optional([
@@ -12,12 +12,18 @@ export default class SubscriptionValidator {
         where: { id: this.ctx.request.input("id") },
       }),
     ]),
-    customer_id: schema.number([
-      rules.required(),
+    customer: schema.object.optional().members({
+      id: schema.number([rules.exists({ table: "customers", column: "id" }),
+      ]),
+    }),
+    customer_id: schema.number.optional([
       rules.exists({ table: "customers", column: "id" }),
     ]),
-    plan_id: schema.number([
-      rules.required(),
+    plan: schema.object.optional().members({
+      id: schema.number([rules.exists({ table: "plans", column: "id" }),
+      ]),
+    }),
+    plan_id: schema.number.optional([
       rules.exists({ table: "plans", column: "id" }),
     ]),
     start_date: schema.date(

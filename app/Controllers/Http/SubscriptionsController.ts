@@ -1,4 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import Plan from "App/Models/Plan";
 
 import Subscription from "App/Models/Subscription";
 import SubscriptionValidator from "App/Validators/SubscriptionValidator";
@@ -6,9 +7,9 @@ import SubscriptionValidator from "App/Validators/SubscriptionValidator";
 export default class SubscriptionsController {
   public async find({ request, params }: HttpContextContract) {
     if (params.id) {
-      let theSubscription: Subscription = await Subscription.findOrFail(
-        params.id,
-      );
+      let theSubscription: Subscription = await Subscription.findOrFail(params.id);
+      await theSubscription.load("plan");
+      await theSubscription.load("customer");
       return theSubscription;
     } else {
       const data = request.all();
@@ -39,10 +40,57 @@ export default class SubscriptionsController {
       });
   }
 
+  async findSubscriptionByPlan({ params }: HttpContextContract) {
+    return Subscription.query()
+      .where("plan_id", params.plan_id)
+      .preload("plan")
+      .then((subs: Subscription[]) => {
+        return subs.map((s) => {
+          return {
+            id: s.id,
+            customer_id: s.customer_id,
+            start_date: s.startDate,
+            end_date: s.endDate,
+            monthly_fee: s.monthlyFee,
+            plan_id: s.plan_id,
+          };
+        });
+      });
+  }
+
   public async create({ request }: HttpContextContract) {
     const body = await request.validate(SubscriptionValidator);
-    const theSubscription: Subscription = await Subscription.create(body);
-    return theSubscription;
+    console.log(body);
+    // antes de crear la suscripción asignarle el id del plan
+    //i llega el objeto plan en el body
+    const thePlan: Plan = await Plan.findOrFail(body.plan?.id);
+
+    //si llega el plan
+    if (body.plan) {
+      const newBody = {
+        plan_id: thePlan?.id,
+        customer_id: body.customer?.id,
+        start_date: body.start_date,
+        end_date: body.end_date,
+        monthly_fee: body.monthly_fee,
+      };
+      const theSubscription: Subscription = await Subscription.create(newBody);
+      return theSubscription;
+    } else if (body.customer) {
+      const newBody = {
+        customer_id: body.customer.id,
+        start_date: body.start_date,
+        end_date: body.end_date,
+        monthly_fee: body.monthly_fee,
+        plan_id: thePlan?.id,
+      };
+      const theSubscription: Subscription = await Subscription.create(newBody);
+      return theSubscription;
+    } else {
+      const theSubscription: Subscription = await Subscription.create(body);
+      return theSubscription;
+    }
+
   }
 
   public async update({ params, request }: HttpContextContract) {

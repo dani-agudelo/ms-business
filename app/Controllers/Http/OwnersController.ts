@@ -47,24 +47,6 @@ export default class OwnersController {
     );
   }
 
-  public async getBeneficiaries({ params }: HttpContextContract) {
-    const theOwner: Owner = await Owner.findOrFail(params.id);
-    await theOwner.load("beneficiaries");
-
-    return Promise.all(
-      theOwner.beneficiaries.map(async (b) => {
-        await b.load("customer");
-        return {
-          id: b.id,
-          name: b.customer.name,
-          email: b.customer.email,
-          document: b.customer.document,
-          age: b.age,
-        };
-      }),
-    );
-  }
-
   public async create({ request }: HttpContextContract) {
     const body = await request.validate(OwnerValidator);
     const theOwner: Owner = await Owner.create(body);

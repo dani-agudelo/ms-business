@@ -6,4 +6,4 @@ Route.group(() => {
   Route.post("/", "CustomersController.create");
   Route.put("/:id", "CustomersController.update");
   Route.delete("/:id", "CustomersController.delete");
-}).prefix("/customers");
+}).prefix("/customers").middleware(["security"]) 

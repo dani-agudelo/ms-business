@@ -59,6 +59,7 @@ export default class CustomersController {
           email,
           id: customer.id,
           document: customer.document,
+          is_alive: customer.is_alive,
         });
       }),
     );
@@ -131,16 +132,5 @@ export default class CustomersController {
     await this.userService.deleteUser(theCustomer.user_id);
     await theCustomer.delete();
     return response.status(204);
-  }
-
-  public async getCommentByServiceExecution({ params }: HttpContextContract) {
-    return Customer.findOrFail(params.id).then((customer) =>
-      customer
-        .related("serviceExecutions")
-        .query()
-        .where("id", params.service_execution_id)
-        .first()
-        .then((serviceExecution) => serviceExecution?.related("comments")),
-    );
   }
 }

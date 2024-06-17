@@ -5,4 +5,6 @@ Route.group(() => {
   Route.post("/", "AdministratorsController.create");
   Route.put("/:id", "AdministratorsController.update");
   Route.delete("/:id", "AdministratorsController.delete");
-}).prefix("/administrators");
+})
+  .prefix("/administrators")
+  .middleware(["security"]);

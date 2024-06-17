@@ -21,6 +21,9 @@ export default class Customer extends BaseModel {
   @column()
   public gender: string;
 
+  @column()
+  public is_alive: boolean;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

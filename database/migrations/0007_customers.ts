@@ -10,6 +10,7 @@ export default class extends BaseSchema {
       table.string("document").notNullable().unique();
       table.string("phone").notNullable();
       table.string("gender").notNullable();
+      table.boolean("is_alive").notNullable();
 
       table.timestamp("created_at", { useTz: true });
       table.timestamp("updated_at", { useTz: true });

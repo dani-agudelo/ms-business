@@ -1,11 +1,17 @@
 import Env from "@ioc:Adonis/Core/Env";
+import TokenContext from "App/Utils/TokenContext";
 import axios from "axios";
 
 export default class UserService {
-  protected baseUrl: string = `${Env.get("MS_SECURITY")}/api/users`;
-  protected headers: any = {
-    Authorization: `Bearer ${Env.get("MS_SECURITY_KEY")}`,
-  };
+  baseUrl: string;
+  headers: object;
+
+  constructor() {
+    this.baseUrl = `${Env.get("MS_SECURITY")}/api/users`;
+    this.headers = {
+      Authorization: `Bearer ${TokenContext.getToken()}`,
+    };
+  }
 
   async getUserById(id: string): Promise<any> {
     return axios.get(`${this.baseUrl}/${id}`, { headers: this.headers });

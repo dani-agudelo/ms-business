@@ -22,6 +22,7 @@ export default class CustomerValidator {
     ]),
     phone: schema.string([rules.mobile({ locale: ["es-CO"] })]),
     gender: schema.string([rules.regex(/^(M|F|O)$/)]),
+    is_alive: schema.boolean(),
   });
   public messages: CustomMessages = {
     "name.required": "El campo name es requerido",
@@ -31,5 +32,6 @@ export default class CustomerValidator {
     "document.unique": "El campo document ya existe en la tabla customers",
     "phone.required": "El campo phone es requerido",
     "phone.mobile": "El campo phone debe ser un número de teléfono válido",
+
   };
 }

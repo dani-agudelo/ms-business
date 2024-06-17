@@ -5,4 +5,4 @@ Route.group(() => {
     Route.post("/cremations", "CremationsController.create");
     Route.put("/cremations/:id", "CremationsController.update");
     Route.delete("/cremations/:id", "CremationsController.delete");
-})
+}).middleware(["security"])

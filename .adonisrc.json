@@ -18,6 +18,7 @@
     "./start/kernel"
   ],
   "providers": [
+    "./providers/AppProvider",
     "@adonisjs/core",
     "@adonisjs/lucid"
   ],

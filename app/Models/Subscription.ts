@@ -21,6 +21,12 @@ export default class Subscription extends BaseModel {
   @column()
   public plan_id: number;
 
+  @column()
+  public reference: string;
+
+  @column()
+  public status: boolean;
+
   @column.dateTime()
   public startDate: DateTime;
 

@@ -67,6 +67,10 @@ export default class CustomersController {
     return customers;
   }
 
+  public async findCustomerByUser({ params }: HttpContextContract) {
+    return await Customer.findByOrFail("user_id", params.user_id);
+  }
+
   public async create({ request, response }: HttpContextContract) {
     const body = await request.validate(CustomerValidator);
     const user = { name: body.name, email: body.email };

@@ -26,6 +26,8 @@ export default class SubscriptionValidator {
     plan_id: schema.number.optional([
       rules.exists({ table: "plans", column: "id" }),
     ]),
+    reference: schema.string.optional(),
+    status: schema.boolean([rules.required()]),
     start_date: schema.date(
       {
         format: "yyyy-MM-dd",

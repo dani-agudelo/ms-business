@@ -1,4 +1,4 @@
-import Ws from 'App/Services/Ws'
+import Ws from 'app/services/Ws'
 Ws.boot()
 
 Ws.io.on('connection', (socket) => {

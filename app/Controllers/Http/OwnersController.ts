@@ -3,7 +3,7 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { ModelObject } from "@ioc:Adonis/Lucid/Orm";
 import Beneficiary from "App/Models/Beneficiary";
 import Owner from "App/Models/Owner";
-import UserService from "App/Services/user_service";
+import UserService from "App/services/user_service";
 import OwnerValidator from "App/Validators/OwnerValidator";
 
 @inject([UserService])

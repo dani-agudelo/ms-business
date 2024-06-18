@@ -2,7 +2,7 @@ import { inject } from "@adonisjs/core/build/standalone";
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 import Beneficiary from "App/Models/Beneficiary";
-import UserService from "App/Services/user_service";
+import UserService from "App/services/user_service";
 import BeneficiaryValidator from "App/Validators/BeneficiaryValidator";
 
 @inject([UserService])

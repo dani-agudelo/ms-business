@@ -9,5 +9,4 @@ Route.group(() => {
   Route.post("", "ChatsController.create");
   Route.put("/:id", "ChatsController.update");
   Route.delete("/:id", "ChatsController.delete");
-}).prefix("/chats")
-// .middleware(["security"]);
+}).prefix("/chats").middleware(["security"]);

@@ -3,7 +3,7 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { ModelObject } from "@ioc:Adonis/Lucid/Orm";
 import Administrator from "App/Models/Administrator";
 import AdministratorValidator from "App/Validators/AdministratorValidator";
-import UserService from "App/Services/user_service";
+import UserService from "App/services/user_service";
 
 @inject([UserService])
 export default class AdministratorsController {
@@ -84,7 +84,7 @@ export default class AdministratorsController {
     Object.keys(data).forEach(
       (key) => Administrator.$hasColumn(key) && (newAdministrator[key] = data[key]),
     );
-    
+
     theAdministrator.merge(data);
     return await theAdministrator.save();
   }

@@ -2,7 +2,7 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Customer from "App/Models/Customer";
 import { ModelObject } from "@ioc:Adonis/Lucid/Orm";
 import CustomerValidator from "App/Validators/CustomerValidator";
-import UserService from "App/Services/user_service";
+import UserService from "App/services/user_service";
 import { inject } from "@adonisjs/core/build/standalone";
 
 @inject([UserService])
@@ -31,9 +31,7 @@ export default class CustomersController {
 
     await Promise.all(
       customers.map(async (customer: Customer, index: number) => {
-        console.log('customeridddd', customer.user_id)
         const res = await this.userService.getUserById(customer.user_id);
-        console.log('ressss', res)
         const { name, email } = res.data;
         customers[index] = { name, email, ...customer.toJSON() };
       }),

@@ -60,7 +60,6 @@ export default class SubscriptionsController {
 
   public async create({ request }: HttpContextContract) {
     const body = await request.validate(SubscriptionValidator);
-    console.log(body);
     // antes de crear la suscripción asignarle el id del plan
     //i llega el objeto plan en el body
     const thePlan: Plan = await Plan.findOrFail(body.plan?.id);

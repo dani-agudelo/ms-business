@@ -20,6 +20,12 @@ export default class ServiceExecutionValidator {
       rules.exists({ table: "customers", column: "id" }),
       rules.required(),
     ]),
+    headquarter_id: schema.number.optional([
+      rules.exists({ table: "headquarters", column: "id" }),
+    ]),
+    headquarter: schema.object.optional().members({
+      id: schema.number([rules.exists({ table: 'headquarters', column: 'id' })])
+    })
   });
 
   public messages: CustomMessages = {

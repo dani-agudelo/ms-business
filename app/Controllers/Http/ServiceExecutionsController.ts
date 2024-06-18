@@ -1,4 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import Headquarter from "App/Models/Headquarter";
 import ServiceExecution from "App/Models/ServiceExecution";
 import ServiceExecutionValidator from "App/Validators/ServiceExecutionValidator";
 
@@ -28,6 +29,18 @@ export default class ServiceExecutionsController {
 
   public async create({ request }: HttpContextContract) {
     const body = await request.validate(ServiceExecutionValidator);
+    console.log('bodyse', body)
+    const theHeadquarter: Headquarter= await Headquarter.findOrFail(body.headquarter?.id);
+    if(body.headquarter){
+      const newBody = {
+        service_id: body.service_id,
+        customer_id: body.customer_id,
+        headquarter_id: theHeadquarter?.id
+      }
+      const theServiceExecution: ServiceExecution =
+      await ServiceExecution.create(newBody);
+      return theServiceExecution;
+    }
     const theServiceExecution: ServiceExecution =
       await ServiceExecution.create(body);
     return theServiceExecution;

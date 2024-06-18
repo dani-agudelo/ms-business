@@ -8,4 +8,4 @@ Route.group(() => {
   Route.delete("/:id", "MessagesController.delete");
 })
   .prefix("/messages")
-  .middleware(["security"]);
+  // .middleware(["security"]);

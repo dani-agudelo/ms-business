@@ -13,6 +13,9 @@ export default class Chat extends BaseModel {
   @column()
   public service_execution_id: number
 
+  @column()
+  public code_chat: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

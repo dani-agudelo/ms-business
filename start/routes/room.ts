@@ -11,5 +11,6 @@ Route.group(() => {
   Route.post("/rooms", "RoomsController.create");
   Route.put("/rooms/:id", "RoomsController.update");
   Route.delete("/rooms/:id", "RoomsController.delete");
-}).middleware(["security"]);
+})
+// .middleware(["security"]);
 

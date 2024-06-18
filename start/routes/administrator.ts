@@ -7,4 +7,4 @@ Route.group(() => {
   Route.delete("/:id", "AdministratorsController.delete");
 })
   .prefix("/administrators")
-  .middleware(["security"]);
+  // .middleware(["security"]);

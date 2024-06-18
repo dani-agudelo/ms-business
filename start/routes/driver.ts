@@ -7,4 +7,4 @@ Route.group(() => {
   Route.delete("/:id", "DriversController.delete");
 })
   .prefix("/drivers")
-  .middleware(["security"]);
+  // .middleware(["security"]);

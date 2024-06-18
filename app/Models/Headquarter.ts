@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { BaseModel, HasMany, column, hasMany } from "@ioc:Adonis/Lucid/Orm";
 import Room from "./Room";
+import ServiceExecution from "./ServiceExecution";
 
 export default class Headquarter extends BaseModel {
   @column({ isPrimary: true })
@@ -28,5 +29,10 @@ export default class Headquarter extends BaseModel {
     foreignKey: "headquarter_id",
   })
   public rooms: HasMany<typeof Room>;
+
+  @hasMany(() => ServiceExecution, {
+    foreignKey: "headquarter_id",
+  })
+  public serviceExecutions: HasMany<typeof ServiceExecution>;
   
 }

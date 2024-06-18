@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import {
   BaseModel,
+  beforeSave,
   BelongsTo,
   belongsTo,
   column,
@@ -13,6 +14,7 @@ import Comment from "./Comment";
 import Chat from "./Chat";
 import Customer from "./Customer";
 import Service from "./Service";
+import Headquarter from "./Headquarter";
 
 export default class ServiceExecution extends BaseModel {
   @column({ isPrimary: true })
@@ -23,6 +25,12 @@ export default class ServiceExecution extends BaseModel {
 
   @column()
   public service_id: number;
+
+  @column()
+  public unique_code: string
+
+  @column()
+  public headquarter_id: number | null 
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
@@ -40,6 +48,11 @@ export default class ServiceExecution extends BaseModel {
   })
   public service: BelongsTo<typeof Service>;
 
+  @belongsTo(() => Headquarter, {
+    foreignKey: "headquarter_id",
+  })
+  public headquarter: BelongsTo<typeof Headquarter>;
+
   @hasMany(() => Comment, {
     foreignKey: "service_execution_id",
   })
@@ -49,4 +62,11 @@ export default class ServiceExecution extends BaseModel {
     foreignKey: "service_execution_id",
   })
   public chat: HasOne<typeof Chat>;
+
+  @beforeSave()
+  public static async generateUniqueCode(serviceExecution: ServiceExecution) {
+    if (!serviceExecution.$dirty.unique_code) {
+      serviceExecution.unique_code = DateTime.now().toFormat('yyyyMMddHHmmss') + Math.floor(Math.random() * 1000)
+    }
+  }
 }

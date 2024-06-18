@@ -9,4 +9,5 @@ Route.group(() => {
   Route.post("/", "ServiceExecutionsController.create");
   Route.put("/:id", "ServiceExecutionsController.update");
   Route.delete("/:id", "ServiceExecutionsController.delete");
-}).prefix("/service_executions").middleware(["security"])
+}).prefix("/service_executions")
+// .middleware(["security"])

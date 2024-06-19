@@ -6,6 +6,4 @@ Route.group(() => {
   Route.post("/", "MessagesController.create");
   Route.put("/:id", "MessagesController.update");
   Route.delete("/:id", "MessagesController.delete");
-})
-  .prefix("/messages")
-  // .middleware(["security"]);
+}).prefix("/messages").middleware(["security"]);

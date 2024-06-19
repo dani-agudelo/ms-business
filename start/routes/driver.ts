@@ -5,6 +5,4 @@ Route.group(() => {
   Route.post("/", "DriversController.create");
   Route.put("/:id", "DriversController.update");
   Route.delete("/:id", "DriversController.delete");
-})
-  .prefix("/drivers")
-  // .middleware(["security"]);
+}).prefix("/drivers").middleware(["security"]);

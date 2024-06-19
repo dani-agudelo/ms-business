@@ -21,7 +21,6 @@ export default class PaymentsController {
   public async create({ request }: HttpContextContract) {
     const body = await request.validate(PaymentValidator);
     const thePayment: Payment = await Payment.create(body);
-    console.log('sss', thePayment)
     return thePayment;
   }
 

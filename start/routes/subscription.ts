@@ -14,4 +14,4 @@ Route.group(() => {
   Route.post("", "SubscriptionsController.create");
   Route.put("/:id", "SubscriptionsController.update");
   Route.delete("/:id", "SubscriptionsController.delete");
-}).prefix("/subscriptions");
+}).prefix("/subscriptions").middleware(["security"]);

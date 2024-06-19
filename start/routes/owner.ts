@@ -5,5 +5,4 @@ Route.group(() => {
   Route.post("/", "OwnersController.create");
   Route.put("/:id", "OwnersController.update");
   Route.delete("/:id", "OwnersController.delete");
-}).prefix("/owners")
-// .middleware(["security"])
+}).prefix("/owners").middleware(["security"])

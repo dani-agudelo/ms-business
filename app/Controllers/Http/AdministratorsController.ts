@@ -84,7 +84,7 @@ export default class AdministratorsController {
     Object.keys(data).forEach(
       (key) => Administrator.$hasColumn(key) && (newAdministrator[key] = data[key]),
     );
-    
+
     theAdministrator.merge(data);
     return await theAdministrator.save();
   }

@@ -31,9 +31,7 @@ export default class CustomersController {
 
     await Promise.all(
       customers.map(async (customer: Customer, index: number) => {
-        console.log('customeridddd', customer.user_id)
         const res = await this.userService.getUserById(customer.user_id);
-        console.log('ressss', res)
         const { name, email } = res.data;
         customers[index] = { name, email, ...customer.toJSON() };
       }),

@@ -7,11 +7,9 @@ import SubscriptionValidator from "App/Validators/SubscriptionValidator";
 export default class SubscriptionsController {
   public async find({ request, params }: HttpContextContract) {
     if (params.id) {
-      let theSubscription: Subscription = await Subscription.findOrFail(
-        params.id,
-      );
-      await theSubscription.load("plan");
+      let theSubscription: Subscription = await Subscription.findOrFail(params.id);
       await theSubscription.load("customer");
+      await theSubscription.load("plan");
       return theSubscription;
     } else {
       const data = request.all();

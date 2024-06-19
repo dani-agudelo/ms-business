@@ -58,4 +58,21 @@ export default class HeadquartersController {
       `${Env.get("API_MAP_NATIONAL")}/?municipio=${city}`,
     ).then((res) => res.data.length === 0);
   }
+
+  async findRoomsByHeadquarter({ params }: HttpContextContract) {
+    const theHeadquarter = await Headquarter.findOrFail(params.headquarter_id);
+    await theHeadquarter.load("rooms");
+
+    return Promise.all(
+      theHeadquarter.rooms.map(async (r) => {
+        return {
+          id: r.id,
+          room_name: r.room_name,
+          room_capacity: r.room_capacity,
+          facilities: r.facilities,
+          is_available: r.is_available,
+        };
+      }),
+    );
+  }
 }

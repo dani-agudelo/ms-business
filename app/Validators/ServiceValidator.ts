@@ -21,6 +21,7 @@ export default class ServiceValidator {
         caseInsensitive: true,
       }),
     ]),
+    is_available: schema.boolean.optional(),
   })
 
   public messages: CustomMessages = {

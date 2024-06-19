@@ -3,6 +3,7 @@ import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:
 import Headquarter from './Headquarter'
 import Sepulture from './Sepulture'
 import Cremation from './Cremation'
+import ServiceExecution from './ServiceExecution'
 
 export default class Room extends BaseModel {
   @column({ isPrimary: true })
@@ -43,4 +44,9 @@ export default class Room extends BaseModel {
     foreignKey: 'room_id',
   })
   public cremations: HasMany<typeof Cremation>
+
+  @hasMany(() => ServiceExecution, {
+    foreignKey: "room_id",
+  })
+  public serviceExecutions: HasMany<typeof ServiceExecution>;
 }

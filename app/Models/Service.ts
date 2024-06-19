@@ -13,6 +13,9 @@ export default class Service extends BaseModel {
   @column()
   public name_service: string;
 
+  @column()
+  public is_available: boolean;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

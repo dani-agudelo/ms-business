@@ -16,10 +16,7 @@ export default class Relocation extends BaseModel {
   public date: DateTime;
 
   @column()
-  public price: number;
-
-  @column()
-  public is_available: boolean;
+  public price: number | null;
 
   @column()
   public service_id: number;

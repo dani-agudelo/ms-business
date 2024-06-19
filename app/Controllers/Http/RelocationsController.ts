@@ -28,6 +28,7 @@ export default class relocationsController {
       return { message: "The origin city does not exist" };
     }
     const data = await request.validate(RelocationValidator);
+    console.log("data", data);
     return await Relocation.create(data);
   }
 

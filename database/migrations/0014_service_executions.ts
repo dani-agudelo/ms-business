@@ -18,6 +18,7 @@ export default class extends BaseSchema {
         .onUpdate("CASCADE");
       table.string("unique_code").unique();
       table.integer("headquarter_id").nullable();
+      table.integer("room_id").nullable();
       table.timestamp("created_at", { useTz: true });
       table.timestamp("updated_at", { useTz: true });
     });

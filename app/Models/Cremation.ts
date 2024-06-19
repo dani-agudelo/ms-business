@@ -7,9 +7,6 @@ export default class Cremation extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
 
-  @column()
-  public location: string;
-
   @column.dateTime()
   public date: DateTime;
 
@@ -17,13 +14,7 @@ export default class Cremation extends BaseModel {
   public price: number;
 
   @column()
-  public is_available: boolean;
-
-  @column()
   public service_id: number;
-
-  @column()
-  public room_id: number;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
@@ -36,8 +27,4 @@ export default class Cremation extends BaseModel {
   })
   public service: BelongsTo<typeof Service>;
 
-  @belongsTo(() => Room, {
-    foreignKey: "room_id",
-  })
-  public room: BelongsTo<typeof Room>;
 }

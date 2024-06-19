@@ -15,6 +15,7 @@ import Chat from "./Chat";
 import Customer from "./Customer";
 import Service from "./Service";
 import Headquarter from "./Headquarter";
+import Room from "./Room";
 
 export default class ServiceExecution extends BaseModel {
   @column({ isPrimary: true })
@@ -31,6 +32,9 @@ export default class ServiceExecution extends BaseModel {
 
   @column()
   public headquarter_id: number | null 
+
+  @column()
+  public room_id: number | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
@@ -52,6 +56,11 @@ export default class ServiceExecution extends BaseModel {
     foreignKey: "headquarter_id",
   })
   public headquarter: BelongsTo<typeof Headquarter>;
+
+  @belongsTo(() => Room, {
+    foreignKey: "room_id",
+  })
+  public room: BelongsTo<typeof Room>;
 
   @hasMany(() => Comment, {
     foreignKey: "service_execution_id",

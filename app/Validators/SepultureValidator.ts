@@ -18,11 +18,6 @@ export default class SepultureValidator {
       rules.minLength(1),
       rules.maxLength(500),
     ]),
-    cemetery_name: schema.string({}, [
-      rules.required(),
-      rules.minLength(1),
-      rules.maxLength(255),
-    ]),
     sepulture_type: schema.string({}, [
       rules.required(),
       rules.minLength(1),
@@ -32,17 +27,11 @@ export default class SepultureValidator {
       rules.required(),
       rules.range(0, 999999999),
     ]),
-    is_available: schema.boolean.optional(),
     service_id: schema.number([
       rules.required(),
       rules.exists({ table: 'services', column: 'id' })
     ]),
-    room_id: schema.number([
-      rules.required(),
-      rules.exists({ table: 'rooms', column: 'id' }),
-    ]),
   })
-
 
   public messages: CustomMessages = {}
 }

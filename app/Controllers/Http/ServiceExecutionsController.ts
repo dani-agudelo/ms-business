@@ -1,13 +1,14 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import Headquarter from "App/Models/Headquarter";
 import ServiceExecution from "App/Models/ServiceExecution";
 import ServiceExecutionValidator from "App/Validators/ServiceExecutionValidator";
 
 export default class ServiceExecutionsController {
   public async find({ request, params }: HttpContextContract) {
     if (params.id) {
-      let theServiceExecution: ServiceExecution =
-        await ServiceExecution.findOrFail(params.id);
+      let theServiceExecution: ServiceExecution = await ServiceExecution.findOrFail(params.id);
+      await theServiceExecution.load("headquarter");
+      await theServiceExecution.load("service");
+      await theServiceExecution.load("room");
       return theServiceExecution;
     } else {
       const data = request.all();
@@ -24,18 +25,18 @@ export default class ServiceExecutionsController {
   public findByCustomer({ params }: HttpContextContract) {
     return ServiceExecution.query()
       .where("customer_id", params.customer_id)
-      .preload("service");
+      .preload("service").preload("headquarter").preload("room");
   }
 
   public async create({ request }: HttpContextContract) {
     const body = await request.validate(ServiceExecutionValidator);
     console.log('bodyse', body)
-    if (body.headquarter) {
-      const theHeadquarter: Headquarter = await Headquarter.findOrFail(body.headquarter?.id);
+    if (body.headquarter && body.service && body.room) {
       const newBody = {
-        service_id: body.service_id,
+        service_id: body.service?.id,
         customer_id: body.customer_id,
-        headquarter_id: theHeadquarter?.id
+        headquarter_id: body.headquarter?.id,
+        room_id: body.room?.id,
       }
       const theServiceExecution: ServiceExecution =
         await ServiceExecution.create(newBody);

@@ -16,20 +16,8 @@ export default class CremationValidator {
       rules.exists({ table: "services", column: "id" }),
       rules.required(),
     ]),
-    room_id: schema.number([
-      rules.exists({ table: "rooms", column: "id" }),
-      rules.required(),
-    ]),
-    location: schema.string([
-      rules.unique({
-        table: "cremations",
-        column: "location",
-        caseInsensitive: true,
-      }),
-    ]),
     date: schema.date({ format: "yyyy-MM-dd" }, [rules.required()]),
     price: schema.number([rules.required()]),
-    is_available: schema.boolean([rules.required()]),
   });
 
   public messages: CustomMessages = {

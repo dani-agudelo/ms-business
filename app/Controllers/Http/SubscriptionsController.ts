@@ -1,4 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import Payment from "App/Models/Payment";
 import Plan from "App/Models/Plan";
 
 import Subscription from "App/Models/Subscription";
@@ -7,7 +8,9 @@ import SubscriptionValidator from "App/Validators/SubscriptionValidator";
 export default class SubscriptionsController {
   public async find({ request, params }: HttpContextContract) {
     if (params.id) {
-      let theSubscription: Subscription = await Subscription.findOrFail(params.id);
+      let theSubscription: Subscription = await Subscription.findOrFail(
+        params.id,
+      );
       await theSubscription.load("customer");
       await theSubscription.load("plan");
       return theSubscription;
@@ -113,11 +116,9 @@ export default class SubscriptionsController {
 
     // Verifica si la suscripción tiene pagos
     if (theSubscription.payments && theSubscription.payments.length > 0) {
-      return response
-        .status(400)
-        .send({
-          message: "No se puede eliminar una suscripción que tiene pagos.",
-        });
+      return response.status(400).send({
+        message: "No se puede eliminar una suscripción que tiene pagos.",
+      });
     }
     response.status(204);
     return await theSubscription.delete();
@@ -138,5 +139,13 @@ export default class SubscriptionsController {
         };
       }),
     );
+  }
+
+  public async getSubscriptionsCountByPayment({}: HttpContextContract) {
+    return await Payment.query()
+      .select("subscription_id")
+      .count("subscription_id")
+      .groupBy("subscription_id")
+      .orderBy("subscription_id", "desc");
   }
 }

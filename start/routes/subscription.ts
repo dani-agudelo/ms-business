@@ -1,6 +1,10 @@
 import Route from "@ioc:Adonis/Core/Route";
 Route.group(() => {
   Route.get("/", "SubscriptionsController.find");
+  Route.get(
+    "/count-by-payment",
+    "SubscriptionsController.getSubscriptionsCountByPayment",
+  );
   Route.get("/:id", "SubscriptionsController.find");
   Route.get(
     "/customer/:customer_id",
@@ -14,4 +18,6 @@ Route.group(() => {
   Route.post("", "SubscriptionsController.create");
   Route.put("/:id", "SubscriptionsController.update");
   Route.delete("/:id", "SubscriptionsController.delete");
-}).prefix("/subscriptions").middleware(["security"]);
+})
+  .prefix("/subscriptions")
+  .middleware(["security"]);

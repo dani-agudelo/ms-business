@@ -26,6 +26,10 @@ export default class ChatsController {
     );
   }
 
+  async findChatByCode({ params }: HttpContextContract) {
+    return await Chat.query().where("code_chat", params.unique_code);
+  }
+
   public async create({ request }: HttpContextContract) {
     const body = await request.validate(ChatValidator);
     const theChat: Chat = await Chat.create(body);

@@ -10,10 +10,13 @@ export default class Message extends BaseModel {
   public content: string;
 
   @column()
-  public user_id: number;
+  public user_id: string;
 
   @column()
   public chat_id: number;
+
+  @column()
+  public timestamp: string | null;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;

@@ -12,8 +12,9 @@ export default class MessageValidator {
         where: { id: this.ctx.request.input("id") },
       }),
     ]),
-    user_id: schema.number(),
+    user_id: schema.string(),
     content: schema.string({}, [rules.required(), rules.minLength(1)]),
+    timestamp: schema.string.optional(),
     chat_id: schema.number([
       rules.required(),
       rules.exists({ table: 'chats', column: 'id', where: { id: this.ctx.request.input('chat_id') } }),

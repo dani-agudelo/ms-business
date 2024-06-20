@@ -6,6 +6,7 @@ Route.group(() => {
     "/service_executions/:service_execution_id",
     "ChatsController.findChatByServiceExecution",
   );
+  Route.get("/code/:unique_code", "ChatsController.findChatByCode");
   Route.post("", "ChatsController.create");
   Route.put("/:id", "ChatsController.update");
   Route.delete("/:id", "ChatsController.delete");

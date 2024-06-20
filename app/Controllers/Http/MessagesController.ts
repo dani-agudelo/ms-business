@@ -30,6 +30,11 @@ export default class MessagesController {
     return theMessage;
   }
 
+  public async createByWebSocket(messageData: any) {
+    const theMessage: Message = await Message.create(messageData);
+    return theMessage;
+}
+
   public async update({ params, request }: HttpContextContract) {
     const theMessage: Message = await Message.findOrFail(params.id);
     const data = request.body();

@@ -1,4 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import Database from "@ioc:Adonis/Lucid/Database";
 import Message from "App/Models/Message";
 import MessageValidator from "App/Validators/MessageValidator";
 
@@ -33,7 +34,7 @@ export default class MessagesController {
   public async createByWebSocket(messageData: any) {
     const theMessage: Message = await Message.create(messageData);
     return theMessage;
-}
+  }
 
   public async update({ params, request }: HttpContextContract) {
     const theMessage: Message = await Message.findOrFail(params.id);
@@ -57,4 +58,20 @@ export default class MessagesController {
     });
     response.status(204);
   }
+
+
+  /**
+   * Consulta para saber el número total de mensajes por día de acuerdo al created_at
+   * 
+   */
+
+  
+  public async getMessagesCountByDate({ }: HttpContextContract) {
+    return await Message.query()
+      .select('created_at')
+      .count('created_at')
+      .groupBy('created_at')
+      .orderBy('created_at', 'desc')
+  }
 }
+

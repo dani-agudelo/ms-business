@@ -6,6 +6,10 @@ Route.group(() => {
     "/customer/:customer_id",
     "ServiceExecutionsController.findByCustomer",
   );
+  Route.get(
+    "/code/:unique_code",
+    "ServiceExecutionsController.findCode",
+  );
   Route.post("/", "ServiceExecutionsController.create");
   Route.put("/:id", "ServiceExecutionsController.update");
   Route.delete("/:id", "ServiceExecutionsController.delete");

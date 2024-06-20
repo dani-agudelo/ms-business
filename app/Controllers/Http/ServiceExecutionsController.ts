@@ -67,4 +67,8 @@ export default class ServiceExecutionsController {
     response.status(204);
     return await theServiceExecution.delete();
   }
+
+  public async findCode({ params }: HttpContextContract) {
+    return ServiceExecution.query().where("unique_code", params.unique_code).first();
+  }
 }

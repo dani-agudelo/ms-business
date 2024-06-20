@@ -47,4 +47,14 @@ export default class MessagesController {
     response.status(204);
     return await theMessage.delete();
   }
+
+  public async deleteByChat({ params, response }: HttpContextContract) {
+    //busca los mensajes del chat
+    const messages = await Message.query().where("chat_id", params.id);
+    //recorre los mensajes y los elimina
+    messages.forEach(async (message) => {
+      await message.delete();
+    });
+    response.status(204);
+  }
 }
